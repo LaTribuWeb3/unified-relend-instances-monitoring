@@ -14,9 +14,11 @@ export const tokenService = {
 
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
 
-    const response = await fetch('/mock-input.json');
+    const response = await fetch(
+      'https://raw.githubusercontent.com/relend-network/RelendAssets/refs/heads/feature/reorga/instances/current.json'
+    );
     if (!response.ok) {
-      throw new Error('Failed to fetch mock-input.json');
+      throw new Error('Failed to fetch remote token data');
     }
 
     const mockTokens: MockTokenInfo[] = await response.json();
