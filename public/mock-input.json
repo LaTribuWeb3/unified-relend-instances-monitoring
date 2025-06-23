@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Swellchain",
+    "L1UnderlyingTokenName": "USDC",
+    "L1UnderlyingTokenAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "L1WrappedTokenName": "rUSDC-swell",
+    "L1WrappedTokenAddress": "0xCB35Be279968F6c53EBF73c8d9D5d7AAf4d34956",
+    "L1OFTAdapterAddress": "0x1939F8C45A7bAf32eBe309e6DA37de128ce4dD07",
+    "L2TokenName": "rUSDC-swell",
+    "L2TokenAddress": "0x9ab96A4668456896d45c301Bc3A15Cee76AA7B8D",
+    "L2TokenIsOFT": true,
+    "L2ChainID": 1923,
+    "L2ChainEVM": true,
+    "BridgeUrl": "https://superbridge.swellnetwork.io/",
+    "wrappedTokenLogoURI": "https://raw.githubusercontent.com/relend-network/RelendAssets/refs/heads/main/Logos/rUSDC/Swell/rUSDC-swell.svg",
+    "live": true,
+    "rpcUrl": "https://rpc.ankr.com/swell"
+  }
+]

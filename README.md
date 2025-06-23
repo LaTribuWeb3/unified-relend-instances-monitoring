@@ -1,22 +1,21 @@
-# Unified Relend Instances Monitoring Dashboard
+# L1 Token List Viewer
 
-A modern React-based monitoring dashboard for unified relend instances with environment switching capabilities between L1 and L2 environments.
+A React application to display a list of L1 tokens by fetching their names directly from the blockchain.
 
 ## Features
 
-- **Environment Switching**: Seamlessly switch between L1 and L2 monitoring environments
-- **Real-time Metrics**: View comprehensive metrics including uptime, response times, and instance status
-- **Instance Status Table**: Detailed table showing all monitored instances with their current status
-- **Responsive Design**: Modern UI built with Material-UI that works on all devices
-- **Auto-refresh**: Manual refresh capability with loading states
-- **Error Handling**: Robust error handling with retry functionality
+- **Dynamic Token Loading**: Reads a list of token contract addresses from `public/mock-input.json`.
+- **On-Chain Data Fetching**: Retrieves the name for each token by calling the `name()` function on its contract.
+- **RPC Configuration**: Uses an RPC URL from the `.env` file to connect to an L1 chain (e.g., Ethereum).
+- **Asynchronous Loading**: Displays a loading indicator while fetching data.
+- **Error Handling**: Shows an error message if data fetching fails.
+- **Responsive Table**: Displays the token address and its fetched name in a clean, responsive table.
 
 ## Technology Stack
 
 - **React 18** with TypeScript
-- **Material-UI (MUI)** for modern UI components
-- **Axios** for API communication
-- **Recharts** for data visualization (ready for future charts)
+- **Ethers.js v5** for blockchain interaction
+- **Material-UI (MUI)** for UI components
 
 ## Getting Started
 
@@ -27,85 +26,62 @@ A modern React-based monitoring dashboard for unified relend instances with envi
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd unified-relend-instances-monitoring
-```
+1.  Clone the repository:
+    ```bash
+    git clone <repository-url>
+    cd unified-relend-instances-monitoring
+    ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
 
-3. Set up environment variables:
-```bash
-# Copy the example environment file
-cp env.config.example .env
+3.  **Set up environment variables:**
 
-# Edit the .env file with your actual API endpoints
-# Update REACT_APP_L1_API_ENDPOINT and REACT_APP_L2_API_ENDPOINT
-```
+    Create a `.env` file in the root directory by copying the example file:
+    ```bash
+    cp env.config.example .env
+    ```
 
-4. Start the development server:
-```bash
-npm start
-```
+    Ensure your `.env` file contains the RPC URL for the L1 network you want to query:
+    ```
+    REACT_APP_L1_RPC_URL=https://mainnet.infura.io/v3/YOUR_PROJECT_ID
+    ```
 
-The application will open at `http://localhost:3000`
+4.  **Customize the token list (optional):**
 
-### Environment Variables
+    Edit the `public/mock-input.json` file to add or remove token addresses:
+    ```json
+    [
+      {
+        "L1WrappedTokenAddress": "0x..."
+      },
+      {
+        "L1WrappedTokenAddress": "0x..."
+      }
+    ]
+    ```
 
-Create a `.env` file in the root directory with the following variables:
+5.  Start the development server:
+    ```bash
+    npm start
+    ```
 
-```bash
-# Required: API Endpoints for different environments
-REACT_APP_L1_API_ENDPOINT=http://your-l1-api-endpoint
-REACT_APP_L2_API_ENDPOINT=http://your-l2-api-endpoint
-
-# Optional: Additional configuration
-REACT_APP_REFRESH_INTERVAL=30000
-REACT_APP_ENABLE_AUTO_REFRESH=true
-REACT_APP_ENVIRONMENT=development
-REACT_APP_DEBUG_MODE=true
-```
-
-**Important Notes:**
-- All environment variables must start with `REACT_APP_` to be accessible in the React application
-- The `.env` file should be added to `.gitignore` to keep sensitive information out of version control
-- You can create different `.env` files for different environments (`.env.development`, `.env.production`, etc.)
-
-### Environment Configuration
-
-The dashboard is configured to work with two environments:
-
-- **L1 Environment**: Level 1 monitoring environment
-- **L2 Environment**: Level 2 monitoring environment
-
-You can configure the API endpoints for each environment by setting environment variables:
-
-```bash
-REACT_APP_L1_API_ENDPOINT=http://your-l1-api-endpoint
-REACT_APP_L2_API_ENDPOINT=http://your-l2-api-endpoint
-```
+The application will open at `http://localhost:3000`.
 
 ## Project Structure
 
 ```
+public/
+└── mock-input.json   # Input file with token addresses
 src/
-├── components/          # React components
-│   ├── EnvironmentSelector.tsx
-│   ├── MetricsCard.tsx
-│   └── InstancesTable.tsx
-├── config/             # Configuration files
-│   └── environments.ts
-├── services/           # API services
-│   └── monitoringService.ts
-├── types/              # TypeScript type definitions
-│   └── index.ts
+├── services/
+│   └── tokenService.ts # Logic for fetching on-chain data
+├── types/
+│   └── index.ts        # TypeScript type definitions
 ├── App.tsx             # Main application component
-├── index.tsx           # Application entry point
-└── index.css           # Global styles
+└── index.tsx           # Application entry point
 ```
 
 ## Available Scripts
