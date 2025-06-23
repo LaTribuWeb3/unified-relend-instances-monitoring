@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { MockTokenInfo, TokenData } from '../types';
 
-const ERC20_ABI = ['function name() view returns (string)'];
+const ERC20_ABI = ['function name() view returns (string)', 'function symbol() view returns (string)'];
 
 export const tokenService = {
   async fetchTokenData(): Promise<TokenData[]> {
@@ -26,10 +26,11 @@ export const tokenService = {
       const contract = new ethers.Contract(address, ERC20_ABI, provider);
       try {
         const name = await contract.name();
-        return { address, name };
+        const symbol = await contract.symbol();
+        return { address, name, symbol };
       } catch (error) {
         console.error(`Failed to fetch name for token at address: ${address}`, error);
-        return { address, name: 'Unknown Token' };
+        return { address, name: 'Unknown Token', symbol: 'Unknown Symbol' };
       }
     });
 

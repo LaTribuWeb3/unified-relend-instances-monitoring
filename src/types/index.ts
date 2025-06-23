@@ -65,4 +65,5 @@ export interface MockTokenInfo {
 export interface TokenData {
   address: string;
   name: string;
+  symbol: string;
 } 

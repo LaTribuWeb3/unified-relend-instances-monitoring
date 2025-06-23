@@ -94,7 +94,9 @@ function App() {
                 <TableBody>
                   {tokens.map((token) => (
                     <TableRow key={token.address}>
-                      <TableCell>{token.name}</TableCell>
+                      <TableCell>
+                        {token.name} ({token.symbol})
+                      </TableCell>
                       <TableCell>{token.address}</TableCell>
                     </TableRow>
                   ))}
