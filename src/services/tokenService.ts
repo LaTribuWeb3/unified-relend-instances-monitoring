@@ -1,18 +1,9 @@
-import { ethers } from 'ethers';
-import { MockTokenInfo, TokenData } from '../types';
-
-const ERC20_ABI = ['function name() view returns (string)', 'function symbol() view returns (string)'];
+import { TokenDefinition, TokenData } from '../types';
+import { TokenDataComputer } from './tokenData/computers/TokenDataComputer';
+import { TokenDataComputerFactory } from './tokenData/computers/TokenDataComputerFactory';
 
 export const tokenService = {
   async fetchTokenData(): Promise<TokenData[]> {
-    const rpcUrl = process.env.REACT_APP_L1_RPC_URL;
-    if (!rpcUrl) {
-      throw new Error(
-        'REACT_APP_L1_RPC_URL is not defined in the environment variables. Please check your .env file and restart the server.'
-      );
-    }
-
-    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
 
     const response = await fetch(
       'https://raw.githubusercontent.com/relend-network/RelendAssets/refs/heads/feature/reorga/instances/current.json'
@@ -21,18 +12,17 @@ export const tokenService = {
       throw new Error('Failed to fetch remote token data');
     }
 
-    const mockTokens: MockTokenInfo[] = await response.json();
+    const tokenDefinitions: TokenDefinition[] = await response.json();
 
-    const tokenDataPromises = mockTokens.map(async (tokenInfo) => {
-      const address = tokenInfo.L1WrappedTokenAddress;
-      const contract = new ethers.Contract(address, ERC20_ABI, provider);
+    const tokenDataPromises = tokenDefinitions.map(async (tokenDefinition) => {
+      const tokenDataComputer: TokenDataComputer = TokenDataComputerFactory.create(tokenDefinition);
       try {
-        const name = await contract.name();
-        const symbol = await contract.symbol();
-        return { address, name, symbol };
+        const name = await tokenDataComputer.name();
+        const symbol = await tokenDataComputer.symbol();
+        return { address: tokenDefinition.L1WrappedTokenAddress, name, symbol };
       } catch (error) {
-        console.error(`Failed to fetch name for token at address: ${address}`, error);
-        return { address, name: 'Unknown Token', symbol: 'Unknown Symbol' };
+        console.error(`Failed to fetch name for token at address: ${tokenDefinition.L1WrappedTokenAddress}`, error);
+        return { address: tokenDefinition.L1WrappedTokenAddress, name: 'Unknown Token', symbol: 'Unknown Symbol' };
       }
     });
 

@@ -44,7 +44,7 @@ export interface DashboardMetrics {
   environment: Environment;
 }
 
-export interface MockTokenInfo {
+export interface TokenDefinition {
   name: string;
   L1UnderlyingTokenName: string;
   L1UnderlyingTokenAddress: string;
@@ -60,8 +60,10 @@ export interface MockTokenInfo {
   wrappedTokenLogoURI: string;
   live: boolean;
   rpcUrl: string;
+  network: Network;
 }
 
+export type Network = 'Ethereum' | 'Swell' | 'Sonic';
 export interface TokenData {
   address: string;
   name: string;
