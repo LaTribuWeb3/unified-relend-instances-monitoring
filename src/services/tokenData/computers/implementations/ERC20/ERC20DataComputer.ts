@@ -17,10 +17,14 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
   }
 
   async name(): Promise<string> {
-    return await this.contract.name();
+    const name = await this.contract.name();
+    console.log("name", name);
+    return name;
   }
 
   async symbol(): Promise<string> {
-    return await this.contract.symbol();
+    const symbol = await this.contract.symbol();
+    console.log("symbol", symbol);
+    return symbol;
   }
 }

@@ -63,7 +63,7 @@ export interface TokenDefinition {
   network: Network;
 }
 
-export type Network = 'Ethereum' | 'Swell' | 'Sonic';
+export type Network = 'Ethereum' | 'Swell' | 'Sonic' | 'Bitlayer';
 export interface TokenData {
   address: string;
   name: string;

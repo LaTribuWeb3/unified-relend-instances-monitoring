@@ -11,34 +11,32 @@ export const tokenService = {
       throw new Error("Failed to fetch remote token data");
     }
 
-    const tokenDefinitions: TokenDefinition[] = await response.json();
+    const tokenDefinitions: TokenDefinition[] = (await response.json()).filter(
+      (tokenDefinition: TokenDefinition) => tokenDefinition.live
+    );
 
     const tokenDataPromises = tokenDefinitions.map(async (tokenDefinition) => {
       const tokenDataComputer: TokenDataComputer =
         TokenDataComputerFactory.create(tokenDefinition);
+
+      let name = "Unknown Token";
+      let symbol = "Unknown Symbol";
       try {
-        const name = await tokenDataComputer.name();
-        const symbol = await tokenDataComputer.symbol();
-        return {
-          address: tokenDefinition.L1WrappedTokenAddress,
-          name,
-          symbol,
-          network: tokenDefinition.name,
-          L1: tokenDefinition.network,
-        };
+        name = await tokenDataComputer.name();
+        symbol = await tokenDataComputer.symbol();
       } catch (error) {
         console.error(
           `Failed to fetch name for token at address: ${tokenDefinition.L1WrappedTokenAddress}`,
           error
         );
-        return {
-          address: tokenDefinition.L1WrappedTokenAddress,
-          name: "Unknown Token",
-          symbol: "Unknown Symbol",
-          network: tokenDefinition.name,
-          L1: tokenDefinition.network,
-        };
       }
+      return {
+        address: tokenDefinition.L1WrappedTokenAddress,
+        name,
+        symbol,
+        network: tokenDefinition.name,
+        L1: tokenDefinition.network,
+      };
     });
 
     return Promise.all(tokenDataPromises);
