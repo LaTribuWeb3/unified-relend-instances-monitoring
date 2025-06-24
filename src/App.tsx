@@ -92,6 +92,7 @@ function App() {
                     <TableCell>Network</TableCell>
                     <TableCell>Token Name</TableCell>
                     <TableCell>L1 Wrapped Token Address</TableCell>
+                    <TableCell>Total Supply</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -112,6 +113,7 @@ function App() {
                           {token.address}
                         </Link>
                       </TableCell>
+                      <TableCell>{token.totalSupply}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

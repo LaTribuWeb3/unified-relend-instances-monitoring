@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { TokenDefinition } from "../../../../../types";
 import { TokenDataComputer } from "../../TokenDataComputer";
 
@@ -12,6 +12,8 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
     const ERC20_ABI = [
       "function name() view returns (string)",
       "function symbol() view returns (string)",
+      "function totalSupply() view returns (uint256)",
+      "function decimals() view returns (uint8)",
     ];
     this.contract = new ethers.Contract(address, ERC20_ABI, provider);
   }
@@ -26,5 +28,13 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
     const symbol = await this.contract.symbol();
     console.log("symbol", symbol);
     return symbol;
+  }
+
+  async totalSupply(): Promise<number> {
+    const totalSupply: BigNumber = await this.contract.totalSupply();
+    const decimals = await this.contract.decimals();
+    console.log("totalSupply", totalSupply);
+    console.log("decimals", decimals);
+    return totalSupply.div(10 ** decimals).toNumber();
   }
 }

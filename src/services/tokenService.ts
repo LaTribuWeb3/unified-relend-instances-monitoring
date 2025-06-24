@@ -21,9 +21,12 @@ export const tokenService = {
 
       let name = "Unknown Token";
       let symbol = "Unknown Symbol";
+      let totalSupply = 0;
+      
       try {
         name = await tokenDataComputer.name();
         symbol = await tokenDataComputer.symbol();
+        totalSupply = await tokenDataComputer.totalSupply();
       } catch (error) {
         console.error(
           `Failed to fetch name for token at address: ${tokenDefinition.L1WrappedTokenAddress}`,
@@ -36,6 +39,7 @@ export const tokenService = {
         symbol,
         network: tokenDefinition.name,
         L1: tokenDefinition.network,
+        totalSupply: totalSupply
       };
     });
 

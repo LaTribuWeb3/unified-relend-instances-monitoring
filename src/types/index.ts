@@ -70,4 +70,5 @@ export interface TokenData {
   symbol: string;
   network: string;
   L1: string;
+  totalSupply: number;
 } 

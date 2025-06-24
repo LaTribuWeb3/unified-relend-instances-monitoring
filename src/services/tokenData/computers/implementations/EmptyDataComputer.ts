@@ -12,4 +12,8 @@ export class EmptyDataComputer extends TokenDataComputer {
   getRpcUrl(): string {
     return "";
   }
+
+  async totalSupply(): Promise<number> {
+    return 0;
+  }
 }
