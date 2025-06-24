@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Container,
   IconButton,
+  Link,
   Paper,
   Table,
   TableBody,
@@ -87,6 +88,8 @@ function App() {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>L1</TableCell>
+                    <TableCell>Network</TableCell>
                     <TableCell>Token Name</TableCell>
                     <TableCell>L1 Wrapped Token Address</TableCell>
                   </TableRow>
@@ -94,10 +97,21 @@ function App() {
                 <TableBody>
                   {tokens.map((token) => (
                     <TableRow key={token.address}>
+                      <TableCell>{token.L1}</TableCell>
+                      <TableCell>{token.network}</TableCell>
                       <TableCell>
                         {token.name} ({token.symbol})
                       </TableCell>
-                      <TableCell>{token.address}</TableCell>
+                      <TableCell>
+                        <Link
+                          href={`https://etherscan.io/address/${token.address}#code`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{ textDecoration: 'none' }}
+                        >
+                          {token.address}
+                        </Link>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

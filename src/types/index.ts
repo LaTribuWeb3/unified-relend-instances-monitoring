@@ -68,4 +68,6 @@ export interface TokenData {
   address: string;
   name: string;
   symbol: string;
+  network: string;
+  L1: string;
 } 
