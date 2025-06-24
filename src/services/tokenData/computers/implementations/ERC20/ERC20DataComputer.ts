@@ -1,19 +1,13 @@
 import { ethers } from "ethers";
-import { TokenDefinition } from "../../../../types";
-import { TokenDataComputer } from "../TokenDataComputer";
+import { TokenDefinition } from "../../../../../types";
+import { TokenDataComputer } from "../../TokenDataComputer";
 
-export class EthereumDataComputer extends TokenDataComputer {
+export abstract class ERC20DataComputer extends TokenDataComputer {
   private contract: ethers.Contract;
 
   constructor(private tokenDefinition: TokenDefinition) {
     super();
-    const rpcUrl = process.env.REACT_APP_L1_RPC_URL;
-    if (!rpcUrl) {
-      throw new Error(
-        "REACT_APP_L1_RPC_URL is not defined in the environment variables. Please check your .env file and restart the server."
-      );
-    }
-    const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+    const provider = new ethers.providers.JsonRpcProvider(this.getRpcUrl());
     const address = this.tokenDefinition.L1WrappedTokenAddress;
     const ERC20_ABI = [
       "function name() view returns (string)",

@@ -8,4 +8,8 @@ export class EmptyDataComputer extends TokenDataComputer {
   async symbol(): Promise<string> {
     return "Undefined Token Symbol";
   }
+
+  getRpcUrl(): string {
+    return "";
+  }
 }

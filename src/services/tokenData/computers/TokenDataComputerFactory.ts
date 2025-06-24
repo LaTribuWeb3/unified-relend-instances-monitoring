@@ -1,6 +1,6 @@
 import { TokenDefinition } from "../../../types";
 import { EmptyDataComputer } from "./implementations/EmptyDataComputer";
-import { EthereumDataComputer } from "./implementations/EthereumDataComputer";
+import { EthereumDataComputer } from "./implementations/ERC20/Ethereum/EthereumDataComputer";
 import { TokenDataComputer } from "./TokenDataComputer";
 
 export class TokenDataComputerFactory {
