@@ -3,4 +3,5 @@ export abstract class TokenDataComputer {
   abstract name(): Promise<string>;
   abstract symbol(): Promise<string>;
   abstract totalSupply(): Promise<number>;
+  abstract totalSupplyUSDC(): Promise<number>;
 }

@@ -30,8 +30,15 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
       "name": "decimals",
       "inputs": [],
       "outputs": [{ "type": "uint8" }]
+    },
+    {
+      "type": "function",
+      "name": "balanceOf",
+      "inputs": [{ "type": "address" }],
+      "outputs": [{ "type": "uint256" }]
     }
   ];
+  private underlyingTokenAddress = this.tokenDefinition.L1UnderlyingTokenAddress;
 
   constructor(private tokenDefinition: TokenDefinition) {
     super();
@@ -75,5 +82,20 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
     console.log("totalSupply", totalSupply);
     console.log("decimals", decimals);
     return Number(totalSupply) / 10 ** Number(decimals);
+  }
+
+  async totalSupplyUSDC(): Promise<number> {
+    const totalSupplyUSDC = await this.provider.readContract({
+      address: this.underlyingTokenAddress as `0x${string}`,
+      abi: this.ERC20_ABI,
+      functionName: "balanceOf",
+      args: [this.address as `0x${string}`],
+    }) as bigint;
+    const decimalsUSDC = await this.provider.readContract({
+      address: this.underlyingTokenAddress as `0x${string}`,
+      abi: this.ERC20_ABI,
+      functionName: "decimals",
+    }) as bigint;
+    return Number(totalSupplyUSDC) / 10 ** Number(decimalsUSDC);
   }
 }

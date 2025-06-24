@@ -92,6 +92,7 @@ function App() {
                     <TableCell>Token Name</TableCell>
                     <TableCell>L1 Wrapped Token Address</TableCell>
                     <TableCell>Total Supply</TableCell>
+                    <TableCell>Total Supply USDC</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -112,6 +113,7 @@ function App() {
                         </Link>
                       </TableCell>
                       <TableCell>{token.totalSupply}</TableCell>
+                      <TableCell>{token.totalSupplyUSDC}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -16,4 +16,8 @@ export class EmptyDataComputer extends TokenDataComputer {
   async totalSupply(): Promise<number> {
     return 0;
   }
+
+  async totalSupplyUSDC(): Promise<number> {
+    return 0;
+  }
 }
