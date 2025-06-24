@@ -88,7 +88,6 @@ function App() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>L1</TableCell>
                     <TableCell>Network</TableCell>
                     <TableCell>Token Name</TableCell>
                     <TableCell>L1 Wrapped Token Address</TableCell>
@@ -98,7 +97,6 @@ function App() {
                 <TableBody>
                   {tokens.map((token) => (
                     <TableRow key={token.address}>
-                      <TableCell>{token.L1}</TableCell>
                       <TableCell>{token.network}</TableCell>
                       <TableCell>
                         {token.name} ({token.symbol})

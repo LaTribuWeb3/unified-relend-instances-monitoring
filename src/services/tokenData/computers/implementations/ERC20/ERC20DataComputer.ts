@@ -1,40 +1,79 @@
-import { BigNumber, ethers } from "ethers";
+import { mainnet } from "viem/chains";
 import { TokenDefinition } from "../../../../../types";
 import { TokenDataComputer } from "../../TokenDataComputer";
+import { createPublicClient, http, PublicClient, parseAbiItem } from "viem";
 
 export abstract class ERC20DataComputer extends TokenDataComputer {
-  private contract: ethers.Contract;
+  private provider: PublicClient;
+  private address = this.tokenDefinition.L1WrappedTokenAddress;
+  private ERC20_ABI = [
+    {
+      "type": "function",
+      "name": "name",
+      "inputs": [],
+      "outputs": [{ "type": "string" }]
+    },
+    {
+      "type": "function",
+      "name": "symbol",
+      "inputs": [],
+      "outputs": [{ "type": "string" }]
+    },
+    {
+      "type": "function",
+      "name": "totalSupply",
+      "inputs": [],
+      "outputs": [{ "type": "uint256" }]
+    },
+    {
+      "type": "function",
+      "name": "decimals",
+      "inputs": [],
+      "outputs": [{ "type": "uint8" }]
+    }
+  ];
 
   constructor(private tokenDefinition: TokenDefinition) {
     super();
-    const provider = new ethers.providers.JsonRpcProvider(this.getRpcUrl());
-    const address = this.tokenDefinition.L1WrappedTokenAddress;
-    const ERC20_ABI = [
-      "function name() view returns (string)",
-      "function symbol() view returns (string)",
-      "function totalSupply() view returns (uint256)",
-      "function decimals() view returns (uint8)",
-    ];
-    this.contract = new ethers.Contract(address, ERC20_ABI, provider);
+    this.provider = createPublicClient({
+      chain: mainnet,
+      transport: http(this.getRpcUrl()),
+    });
   }
 
   async name(): Promise<string> {
-    const name = await this.contract.name();
+    const name = await this.provider.readContract({
+      address: this.address as `0x${string}`,
+      abi: this.ERC20_ABI,
+      functionName: "name",
+    }) as string;
     console.log("name", name);
     return name;
   }
 
   async symbol(): Promise<string> {
-    const symbol = await this.contract.symbol();
+    const symbol = await this.provider.readContract({
+      address: this.address as `0x${string}`,
+      abi: this.ERC20_ABI,
+      functionName: "symbol",
+    }) as string;
     console.log("symbol", symbol);
     return symbol;
   }
 
   async totalSupply(): Promise<number> {
-    const totalSupply: BigNumber = await this.contract.totalSupply();
-    const decimals = await this.contract.decimals();
+    const totalSupply = await this.provider.readContract({
+      address: this.address as `0x${string}`,
+      abi: this.ERC20_ABI,
+      functionName: "totalSupply",
+    }) as bigint;
+    const decimals = await this.provider.readContract({
+      address: this.address as `0x${string}`,
+      abi: this.ERC20_ABI,
+      functionName: "decimals",
+    }) as bigint;
     console.log("totalSupply", totalSupply);
     console.log("decimals", decimals);
-    return totalSupply.div(10 ** decimals).toNumber();
+    return Number(totalSupply) / 10 ** Number(decimals);
   }
 }

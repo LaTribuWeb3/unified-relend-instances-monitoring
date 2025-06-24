@@ -64,11 +64,29 @@ export interface TokenDefinition {
 }
 
 export type Network = 'Ethereum' | 'Swell' | 'Sonic' | 'Bitlayer';
+
+export interface MockTokenInfo {
+  name: string;
+  L1UnderlyingTokenName: string;
+  L1UnderlyingTokenAddress: string;
+  L1WrappedTokenName: string;
+  L1WrappedTokenAddress: string;
+  L1OFTAdapterAddress: string;
+  L2TokenName: string;
+  L2TokenAddress: string;
+  L2TokenIsOFT: boolean;
+  L2ChainID: number;
+  L2ChainEVM: boolean;
+  BridgeUrl: string;
+  wrappedTokenLogoURI: string;
+  live: boolean;
+  rpcUrl: string;
+}
+
 export interface TokenData {
   address: string;
   name: string;
   symbol: string;
   network: string;
-  L1: string;
   totalSupply: number;
 } 
