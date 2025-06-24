@@ -1,7 +1,7 @@
+import { createPublicClient, http, PublicClient } from "viem";
 import { mainnet } from "viem/chains";
 import { TokenDefinition } from "../../../../../types";
 import { TokenDataComputer } from "../../TokenDataComputer";
-import { createPublicClient, http, PublicClient, parseAbiItem } from "viem";
 
 export abstract class ERC20DataComputer extends TokenDataComputer {
   private provider: PublicClient;
