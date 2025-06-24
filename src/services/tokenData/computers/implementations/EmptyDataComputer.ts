@@ -2,10 +2,10 @@ import { TokenDataComputer } from "../TokenDataComputer";
 
 export class EmptyDataComputer extends TokenDataComputer {
   async name(): Promise<string> {
-    return "";
+    return "Undefined Token Name";
   }
 
   async symbol(): Promise<string> {
-    return "";
+    return "Undefined Token Symbol";
   }
 }
