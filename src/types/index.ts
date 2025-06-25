@@ -61,7 +61,8 @@ export interface TokenDefinition {
   live: boolean;
   rpcUrl: string;
   network: Network;
-  bridgeAddress: string;
+  L1BridgeAddress: string;
+  L2BridgeAddress: string;
 }
 
 export type Network = 'Ethereum' | 'Swell' | 'Sonic' | 'Bitlayer';
@@ -92,5 +93,6 @@ export interface TokenData {
   totalSupply: string;
   totalSupplyUSDC: string;
   bridgeUrl: string;
-  bridgeAddress: string;
+  L1BridgeAddress: string;
+  L2BridgeAddress: string;
 } 

@@ -1,4 +1,7 @@
-import { ArrowBack as ArrowBackIcon, Launch as LaunchIcon } from '@mui/icons-material';
+import {
+  ArrowBack as ArrowBackIcon,
+  Launch as LaunchIcon,
+} from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -11,12 +14,12 @@ import {
   Paper,
   Toolbar,
   Typography,
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { tokenService } from '../services/tokenService';
-import { TokenData } from '../types';
+import { tokenService } from "../services/tokenService";
+import { TokenData } from "../types";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -28,22 +31,22 @@ const TokenDetail: React.FC = () => {
   useEffect(() => {
     const loadTokenData = async () => {
       if (!address) {
-        setError('Token address not provided');
+        setError("Token address not provided");
         setLoading(false);
         return;
       }
 
       try {
         const allTokens = await tokenService.fetchTokenData();
-        const foundToken = allTokens.find(t => t.address === address);
-        
+        const foundToken = allTokens.find((t) => t.address === address);
+
         if (foundToken) {
           setToken(foundToken);
         } else {
-          setError('Token not found');
+          setError("Token not found");
         }
       } catch (err: any) {
-        setError(err.message || 'Failed to load token data');
+        setError(err.message || "Failed to load token data");
       } finally {
         setLoading(false);
       }
@@ -53,12 +56,17 @@ const TokenDetail: React.FC = () => {
   }, [address]);
 
   const handleBack = () => {
-    navigate('/');
+    navigate("/");
   };
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
         <Typography>Loading...</Typography>
       </Box>
     );
@@ -66,9 +74,15 @@ const TokenDetail: React.FC = () => {
 
   if (error || !token) {
     return (
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
         <Typography color="error" variant="h6" gutterBottom>
-          {error || 'Token not found'}
+          {error || "Token not found"}
         </Typography>
         <Button onClick={handleBack} variant="contained" sx={{ mt: 2 }}>
           Back to Token List
@@ -78,7 +92,7 @@ const TokenDetail: React.FC = () => {
   }
 
   return (
-    <Box sx={{ background: '#f7f9fb', minHeight: '100vh' }}>
+    <Box sx={{ background: "#f7f9fb", minHeight: "100vh" }}>
       <AppBar position="static" color="default" elevation={1}>
         <Toolbar>
           <Button
@@ -88,7 +102,11 @@ const TokenDetail: React.FC = () => {
           >
             Back
           </Button>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1, fontWeight: 700 }}>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1, fontWeight: 700 }}
+          >
             Token Details
           </Typography>
         </Toolbar>
@@ -96,10 +114,15 @@ const TokenDetail: React.FC = () => {
 
       <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2 }}>
-          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            sx={{ fontWeight: 700 }}
+          >
             {token.name}
           </Typography>
-          
+
           <Box sx={{ mt: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
               Token Information
@@ -111,19 +134,19 @@ const TokenDetail: React.FC = () => {
               <strong>Network:</strong> {token.network}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Address:</strong>{' '}
+              <strong>Address:</strong>{" "}
               <Link
                 href={`https://etherscan.io/address/${token.address}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{ 
-                  textDecoration: 'none', 
-                  fontFamily: 'monospace', 
+                sx={{
+                  textDecoration: "none",
+                  fontFamily: "monospace",
                   fontSize: 15,
-                  color: '#1976d2',
-                  '&:hover': {
-                    textDecoration: 'underline'
-                  }
+                  color: "#1976d2",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
                 }}
               >
                 {token.address}
@@ -142,31 +165,64 @@ const TokenDetail: React.FC = () => {
           <Grid item xs={12} md={6}>
             <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   <LaunchIcon sx={{ mr: 1 }} />
                   Bridge
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
                   Access the bridge to transfer {token.symbol} tokens
                 </Typography>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>bridge contract:</strong>{' '}
+                    <strong>L1 Bridge contract:</strong>{" "}
                     <Link
-                      href={`https://etherscan.io/address/${token.bridgeAddress}#code`}
+                      href={`https://etherscan.io/address/${token.L1BridgeAddress}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      sx={{ 
-                        textDecoration: 'none', 
-                        fontFamily: 'monospace', 
+                      sx={{
+                        textDecoration: "none",
+                        fontFamily: "monospace",
                         fontSize: 14,
-                        color: '#1976d2',
-                        '&:hover': {
-                          textDecoration: 'underline'
-                        }
+                        color: "#1976d2",
+                        "&:hover": {
+                          textDecoration: "underline",
+                        },
                       }}
                     >
-                      {token.bridgeAddress}
+                      {token.L1BridgeAddress}
+                    </Link>
+                  </Typography>
+                </Box>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
+                    <strong>L2 Bridge contract:</strong>{" "}
+                    <Link
+                      href={`https://swellchainscan.io/address/${token.L2BridgeAddress}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{
+                        textDecoration: "none",
+                        fontFamily: "monospace",
+                        fontSize: 14,
+                        color: "#1976d2",
+                        "&:hover": {
+                          textDecoration: "underline",
+                        },
+                      }}
+                    >
+                      {token.L2BridgeAddress}
                     </Link>
                   </Typography>
                 </Box>
@@ -174,13 +230,13 @@ const TokenDetail: React.FC = () => {
                   href={token.bridgeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  sx={{ 
-                    textDecoration: 'none',
-                    color: '#1976d2',
+                  sx={{
+                    textDecoration: "none",
+                    color: "#1976d2",
                     fontWeight: 500,
-                    '&:hover': {
-                      textDecoration: 'underline'
-                    }
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
                   }}
                 >
                   Open Bridge →
@@ -194,4 +250,4 @@ const TokenDetail: React.FC = () => {
   );
 };
 
-export default TokenDetail; 
+export default TokenDetail;
