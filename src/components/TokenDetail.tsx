@@ -263,6 +263,38 @@ const TokenDetail: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ fontWeight: 600, display: "flex", alignItems: "center" }}
+                >
+                  <LaunchIcon sx={{ mr: 1 }} />
+                  Decentralized Exchange
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  View liquidity and trade {token.symbol} on Velodrome
+                </Typography>
+                <Link
+                  href={`https://velodrome.finance/liquidity?filters=${token.network}&query=${token.L2TokenAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    textDecoration: "none",
+                    color: "#1976d2",
+                    fontWeight: 500,
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  View on Velodrome →
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
       </Container>
     </Box>

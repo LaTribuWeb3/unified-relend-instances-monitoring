@@ -111,6 +111,7 @@ function TokenList() {
                   <TableCell sx={{ fontWeight: 700 }}>L1 Wrapped Token Address</TableCell>
                   <TableCell sx={{ fontWeight: 700, textAlign: 'right' }}>Total Supply</TableCell>
                   <TableCell sx={{ fontWeight: 700, textAlign: 'right' }}>Total Supply USDC</TableCell>
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'center' }}>Ratio</TableCell>
                   <TableCell sx={{ fontWeight: 700, textAlign: 'center' }}>Details</TableCell>
                 </TableRow>
               </TableHead>
@@ -138,6 +139,9 @@ function TokenList() {
                     </TableCell>
                     <TableCell align="right" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
                       {formatNumber(Number(token.totalSupplyUSDC), 0)}
+                    </TableCell>
+                    <TableCell align="center" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
+                      {formatNumber((Number(token.totalSupplyUSDC) / Number(token.totalSupply)) * 100, 2)}%
                     </TableCell>
                     <TableCell align="center">
                       <IconButton
