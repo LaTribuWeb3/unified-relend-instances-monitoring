@@ -16,7 +16,8 @@
     "recharts": "^2.5.0",
     "typescript": "^5.0.4",
     "web-vitals": "^2.1.4",
-    "viem": "^2.7.9"
+    "viem": "^2.7.9",
+    "react-router-dom": "^6.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
