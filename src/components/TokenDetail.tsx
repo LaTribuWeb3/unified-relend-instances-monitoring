@@ -134,7 +134,7 @@ const TokenDetail: React.FC = () => {
               <strong>Network:</strong> {token.network}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Address:</strong>{" "}
+              <strong>L1 Token Address:</strong>{" "}
               <Link
                 href={`https://etherscan.io/address/${token.address}`}
                 target="_blank"
@@ -150,6 +150,25 @@ const TokenDetail: React.FC = () => {
                 }}
               >
                 {token.address}
+              </Link>
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              <strong>L2 Token Address:</strong>{" "}
+              <Link
+                href={`https://swellchainscan.io/address/${token.L2TokenAddress}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  textDecoration: "none",
+                  fontFamily: "monospace",
+                  fontSize: 15,
+                  color: "#1976d2",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                {token.L2TokenAddress}
               </Link>
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>

@@ -87,6 +87,7 @@ export interface MockTokenInfo {
 
 export interface TokenData {
   address: string;
+  L2TokenAddress: string;
   name: string;
   symbol: string;
   network: string;

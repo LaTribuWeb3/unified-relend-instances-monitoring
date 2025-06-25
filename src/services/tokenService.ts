@@ -37,6 +37,7 @@ export const tokenService = {
       }
       return {
         address: tokenDefinition.L1WrappedTokenAddress,
+        L2TokenAddress: tokenDefinition.L2TokenAddress,
         name,
         symbol,
         network: tokenDefinition.name,
