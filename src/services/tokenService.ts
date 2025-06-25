@@ -41,8 +41,10 @@ export const tokenService = {
         symbol,
         network: tokenDefinition.name,
         L1: tokenDefinition.network,
-        totalSupply: totalSupply,
-        totalSupplyUSDC: totalSupplyUSDC
+        totalSupply: totalSupply.toString(),
+        totalSupplyUSDC: totalSupplyUSDC.toString(),
+        bridgeUrl: tokenDefinition.BridgeUrl,
+        bridgeAddress: tokenDefinition.bridgeAddress
       };
     });
 

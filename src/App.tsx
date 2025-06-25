@@ -134,10 +134,10 @@ function TokenList() {
                       </Link>
                     </TableCell>
                     <TableCell align="right" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
-                      {formatNumber(token.totalSupply, 0)}
+                      {formatNumber(Number(token.totalSupply), 0)}
                     </TableCell>
                     <TableCell align="right" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
-                      {formatNumber(token.totalSupplyUSDC, 0)}
+                      {formatNumber(Number(token.totalSupplyUSDC), 0)}
                     </TableCell>
                     <TableCell align="center">
                       <IconButton

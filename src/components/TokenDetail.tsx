@@ -1,9 +1,13 @@
-import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import { ArrowBack as ArrowBackIcon, Launch as LaunchIcon } from '@mui/icons-material';
 import {
   AppBar,
   Box,
   Button,
+  Card,
+  CardContent,
   Container,
+  Grid,
+  Link,
   Paper,
   Toolbar,
   Typography,
@@ -107,7 +111,23 @@ const TokenDetail: React.FC = () => {
               <strong>Network:</strong> {token.network}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Address:</strong> {token.address}
+              <strong>Address:</strong>{' '}
+              <Link
+                href={`https://etherscan.io/address/${token.address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ 
+                  textDecoration: 'none', 
+                  fontFamily: 'monospace', 
+                  fontSize: 15,
+                  color: '#1976d2',
+                  '&:hover': {
+                    textDecoration: 'underline'
+                  }
+                }}
+              >
+                {token.address}
+              </Link>
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>Total Supply:</strong> {token.totalSupply}
@@ -117,6 +137,58 @@ const TokenDetail: React.FC = () => {
             </Typography>
           </Box>
         </Paper>
+
+        <Grid container spacing={3} sx={{ mt: 3 }}>
+          <Grid item xs={12} md={6}>
+            <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                  <LaunchIcon sx={{ mr: 1 }} />
+                  Bridge
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Access the bridge to transfer {token.symbol} tokens
+                </Typography>
+                <Box sx={{ mb: 2 }}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
+                    <strong>bridge contract:</strong>{' '}
+                    <Link
+                      href={`https://etherscan.io/address/${token.bridgeAddress}#code`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      sx={{ 
+                        textDecoration: 'none', 
+                        fontFamily: 'monospace', 
+                        fontSize: 14,
+                        color: '#1976d2',
+                        '&:hover': {
+                          textDecoration: 'underline'
+                        }
+                      }}
+                    >
+                      {token.bridgeAddress}
+                    </Link>
+                  </Typography>
+                </Box>
+                <Link
+                  href={token.bridgeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ 
+                    textDecoration: 'none',
+                    color: '#1976d2',
+                    fontWeight: 500,
+                    '&:hover': {
+                      textDecoration: 'underline'
+                    }
+                  }}
+                >
+                  Open Bridge →
+                </Link>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );
