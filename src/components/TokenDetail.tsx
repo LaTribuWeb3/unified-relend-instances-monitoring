@@ -20,7 +20,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
-import AddressLink from './AddressLink';
+import AddressLink from "./AddressLink";
+import { bitlayer, sonic, swellchain } from "viem/chains";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -92,6 +93,19 @@ const TokenDetail: React.FC = () => {
     );
   }
 
+  function computeExplorerFromChainId(L2ChainID: number): string {
+    switch (L2ChainID) {
+      case sonic.id:
+        return "https://sonicscan.org/address/";
+      case bitlayer.id:
+        return "https://bitlayer.io/address/";
+      case swellchain.id:
+        return "https://swellchainscan.io/address/";
+      default:
+        return "https://etherscan.io/address/";
+    }
+  }
+
   return (
     <Box sx={{ background: "#f7f9fb", minHeight: "100vh" }}>
       <AppBar position="static" color="default" elevation={1}>
@@ -135,7 +149,7 @@ const TokenDetail: React.FC = () => {
               <strong>Network:</strong> {token.network}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Address:</strong>{' '}
+              <strong>Address:</strong>{" "}
               <AddressLink
                 address={token.address}
                 explorerBaseUrl="https://etherscan.io/address/"
@@ -145,7 +159,7 @@ const TokenDetail: React.FC = () => {
               <strong>L2 Token Address:</strong>{" "}
               <AddressLink
                 address={token.L2TokenAddress}
-                explorerBaseUrl="https://swellchainscan.io/address/"
+                explorerBaseUrl={computeExplorerFromChainId(token.L2ChainID)}
               />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
@@ -182,7 +196,7 @@ const TokenDetail: React.FC = () => {
                 </Typography>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>L1 Bridge contract:</strong>{' '}
+                    <strong>L1 Bridge contract:</strong>{" "}
                     <AddressLink
                       address={token.L1BridgeAddress}
                       explorerBaseUrl="https://etherscan.io/address/"
@@ -191,10 +205,12 @@ const TokenDetail: React.FC = () => {
                 </Box>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>L2 Bridge contract:</strong>{' '}
+                    <strong>L2 Bridge contract:</strong>{" "}
                     <AddressLink
                       address={token.L2BridgeAddress}
-                      explorerBaseUrl="https://swellchainscan.io/address/"
+                      explorerBaseUrl={computeExplorerFromChainId(
+                        token.L2ChainID
+                      )}
                     />
                   </Typography>
                 </Box>
@@ -222,12 +238,20 @@ const TokenDetail: React.FC = () => {
                 <Typography
                   variant="h6"
                   gutterBottom
-                  sx={{ fontWeight: 600, display: "flex", alignItems: "center" }}
+                  sx={{
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
                   <LaunchIcon sx={{ mr: 1 }} />
                   Decentralized Exchange
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
                   View liquidity and trade {token.symbol} on Velodrome
                 </Typography>
                 <Link

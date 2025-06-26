@@ -46,7 +46,8 @@ export const tokenService = {
         totalSupplyUSDC: totalSupplyUSDC.toString(),
         bridgeUrl: tokenDefinition.BridgeUrl,
         L1BridgeAddress: tokenDefinition.L1BridgeAddress,
-        L2BridgeAddress: tokenDefinition.L2BridgeAddress
+        L2BridgeAddress: tokenDefinition.L2BridgeAddress,
+        L2ChainID: tokenDefinition.L2ChainID
       };
     });
 

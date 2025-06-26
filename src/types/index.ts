@@ -87,7 +87,6 @@ export interface MockTokenInfo {
 
 export interface TokenData {
   address: string;
-  L2TokenAddress: string;
   name: string;
   symbol: string;
   network: string;
@@ -95,5 +94,7 @@ export interface TokenData {
   totalSupplyUSDC: string;
   bridgeUrl: string;
   L1BridgeAddress: string;
+  L2ChainID: number;
+  L2TokenAddress: string;
   L2BridgeAddress: string;
 } 
