@@ -22,6 +22,9 @@ import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
+import { TradeLinkType } from "./tradelinks/TradeLink";
+import { EkuboTradeLink } from "./tradelinks/implementations/EkuboTradeLink";
+import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -137,10 +140,7 @@ const TokenDetail: React.FC = () => {
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>Address:</strong>{" "}
-              <AddressLink
-                address={token.address}
-                chainId={mainnet.id}
-              />
+              <AddressLink address={token.address} chainId={mainnet.id} />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>L2 Token Address:</strong>{" "}
@@ -232,28 +232,14 @@ const TokenDetail: React.FC = () => {
                   <LaunchIcon sx={{ mr: 1 }} />
                   Decentralized Exchange
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  View liquidity and trade {token.symbol} on Velodrome
-                </Typography>
-                <Link
-                  href={`https://velodrome.finance/liquidity?filters=${token.network}&query=${token.L2TokenAddress}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    textDecoration: "none",
-                    color: "#1976d2",
-                    fontWeight: 500,
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
-                  }}
-                >
-                  View on Velodrome →
-                </Link>
+                {TradeLinkType.of(
+                  new VelodromeTradeLink(
+                    token.symbol,
+                    token.network,
+                    token.L2TokenAddress
+                  )
+                )}
+                {TradeLinkType.of(new EkuboTradeLink(token.symbol))}
               </CardContent>
             </Card>
           </Grid>
