@@ -1,4 +1,4 @@
-import { Refresh as RefreshIcon, ArrowForward as ArrowForwardIcon } from '@mui/icons-material';
+import { ArrowForward as ArrowForwardIcon, Refresh as RefreshIcon } from '@mui/icons-material';
 import {
   AppBar,
   Box,
@@ -18,12 +18,14 @@ import {
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 
+import { mainnet } from 'viem/chains';
 import TokenDetail from './components/TokenDetail';
 import { tokenService } from './services/tokenService';
 import { TokenData } from './types';
+import { computeExplorerFromChainId } from './utils/ChainUtils';
 
 const theme = createTheme({
   palette: {
@@ -126,7 +128,7 @@ function TokenList() {
                     </TableCell>
                     <TableCell>
                       <Link
-                        href={`https://etherscan.io/address/${token.address}#code`}
+                        href={`${computeExplorerFromChainId(mainnet.id)}${token.address}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{ textDecoration: 'none', fontFamily: 'monospace', fontSize: 15 }}

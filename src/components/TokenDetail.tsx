@@ -16,12 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
+import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
-import { computeExplorerFromChainId } from "../utils/ChainUtils";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -139,14 +139,14 @@ const TokenDetail: React.FC = () => {
               <strong>Address:</strong>{" "}
               <AddressLink
                 address={token.address}
-                explorerBaseUrl="https://etherscan.io/address/"
+                chainId={mainnet.id}
               />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>L2 Token Address:</strong>{" "}
               <AddressLink
                 address={token.L2TokenAddress}
-                explorerBaseUrl={computeExplorerFromChainId(token.L2ChainID)}
+                chainId={token.L2ChainID}
               />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
@@ -186,7 +186,7 @@ const TokenDetail: React.FC = () => {
                     <strong>L1 Bridge contract:</strong>{" "}
                     <AddressLink
                       address={token.L1BridgeAddress}
-                      explorerBaseUrl="https://etherscan.io/address/"
+                      chainId={mainnet.id}
                     />
                   </Typography>
                 </Box>
@@ -195,9 +195,7 @@ const TokenDetail: React.FC = () => {
                     <strong>L2 Bridge contract:</strong>{" "}
                     <AddressLink
                       address={token.L2BridgeAddress}
-                      explorerBaseUrl={computeExplorerFromChainId(
-                        token.L2ChainID
-                      )}
+                      chainId={token.L2ChainID}
                     />
                   </Typography>
                 </Box>

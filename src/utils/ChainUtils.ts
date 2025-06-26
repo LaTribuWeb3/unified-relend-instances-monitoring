@@ -1,10 +1,10 @@
-import { bitlayer, sonic, swellchain } from "viem/chains";
+import { bitlayer, mainnet, sonic, swellchain } from "viem/chains";
 
-const supportedChains = [sonic, bitlayer, swellchain];
+const supportedChains = [mainnet, sonic, bitlayer, swellchain];
 
-export function computeExplorerFromChainId(L2ChainID: number): string {
+export function computeExplorerFromChainId(chainId: number): string {
   return (
-    supportedChains.find((chain) => chain.id === L2ChainID)
+    supportedChains.find((chain) => chain.id === chainId)
       ?.blockExplorers.default.url + "/address/"
   );
 }

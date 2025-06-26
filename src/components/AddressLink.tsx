@@ -1,16 +1,17 @@
-import React from 'react';
 import { Link } from '@mui/material';
+import React from 'react';
+import { computeExplorerFromChainId } from '../utils/ChainUtils';
 
 interface AddressLinkProps {
   address: string;
-  explorerBaseUrl: string; // e.g. https://etherscan.io/address/
+  chainId: number; // To be used with computeExplorerFromChainId to retrieve the correct explorer url
 }
 
-const AddressLink: React.FC<AddressLinkProps> = ({ address, explorerBaseUrl }) => {
+const AddressLink: React.FC<AddressLinkProps> = ({ address, chainId }) => {
   if (!address) return null;
   return (
     <Link
-      href={`${explorerBaseUrl}${address}`}
+      href={`${computeExplorerFromChainId(chainId)}${address}`}
       target="_blank"
       rel="noopener noreferrer"
       sx={{
