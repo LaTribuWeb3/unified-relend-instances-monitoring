@@ -21,7 +21,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
-import { bitlayer, sonic, swellchain } from "viem/chains";
+import { computeExplorerFromChainId } from "../utils/ChainUtils";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -91,19 +91,6 @@ const TokenDetail: React.FC = () => {
         </Button>
       </Box>
     );
-  }
-
-  function computeExplorerFromChainId(L2ChainID: number): string {
-    switch (L2ChainID) {
-      case sonic.id:
-        return "https://sonicscan.org/address/";
-      case bitlayer.id:
-        return "https://bitlayer.io/address/";
-      case swellchain.id:
-        return "https://swellchainscan.io/address/";
-      default:
-        return "https://etherscan.io/address/";
-    }
   }
 
   return (
