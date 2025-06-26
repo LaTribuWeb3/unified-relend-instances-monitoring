@@ -20,6 +20,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
+import AddressLink from './AddressLink';
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -134,42 +135,18 @@ const TokenDetail: React.FC = () => {
               <strong>Network:</strong> {token.network}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>L1 Token Address:</strong>{" "}
-              <Link
-                href={`https://etherscan.io/address/${token.address}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  textDecoration: "none",
-                  fontFamily: "monospace",
-                  fontSize: 15,
-                  color: "#1976d2",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                {token.address}
-              </Link>
+              <strong>Address:</strong>{' '}
+              <AddressLink
+                address={token.address}
+                explorerBaseUrl="https://etherscan.io/address/"
+              />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>L2 Token Address:</strong>{" "}
-              <Link
-                href={`https://swellchainscan.io/address/${token.L2TokenAddress}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  textDecoration: "none",
-                  fontFamily: "monospace",
-                  fontSize: 15,
-                  color: "#1976d2",
-                  "&:hover": {
-                    textDecoration: "underline",
-                  },
-                }}
-              >
-                {token.L2TokenAddress}
-              </Link>
+              <AddressLink
+                address={token.L2TokenAddress}
+                explorerBaseUrl="https://swellchainscan.io/address/"
+              />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>Total Supply:</strong> {token.totalSupply}
@@ -205,44 +182,20 @@ const TokenDetail: React.FC = () => {
                 </Typography>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>L1 Bridge contract:</strong>{" "}
-                    <Link
-                      href={`https://etherscan.io/address/${token.L1BridgeAddress}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        textDecoration: "none",
-                        fontFamily: "monospace",
-                        fontSize: 14,
-                        color: "#1976d2",
-                        "&:hover": {
-                          textDecoration: "underline",
-                        },
-                      }}
-                    >
-                      {token.L1BridgeAddress}
-                    </Link>
+                    <strong>L1 Bridge contract:</strong>{' '}
+                    <AddressLink
+                      address={token.L1BridgeAddress}
+                      explorerBaseUrl="https://etherscan.io/address/"
+                    />
                   </Typography>
                 </Box>
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>L2 Bridge contract:</strong>{" "}
-                    <Link
-                      href={`https://swellchainscan.io/address/${token.L2BridgeAddress}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{
-                        textDecoration: "none",
-                        fontFamily: "monospace",
-                        fontSize: 14,
-                        color: "#1976d2",
-                        "&:hover": {
-                          textDecoration: "underline",
-                        },
-                      }}
-                    >
-                      {token.L2BridgeAddress}
-                    </Link>
+                    <strong>L2 Bridge contract:</strong>{' '}
+                    <AddressLink
+                      address={token.L2BridgeAddress}
+                      explorerBaseUrl="https://swellchainscan.io/address/"
+                    />
                   </Typography>
                 </Box>
                 <Link
