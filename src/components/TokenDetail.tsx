@@ -1,8 +1,6 @@
 import {
   ArrowBack as ArrowBackIcon,
-  Launch as LaunchIcon,
-  AccountBalance as VaultIcon,
-  ArrowForward as ArrowForwardIcon,
+  Launch as LaunchIcon
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -15,8 +13,7 @@ import {
   Link,
   Paper,
   Toolbar,
-  Typography,
-  Chip,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -25,10 +22,9 @@ import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
-import { getVaultData, VaultData } from "./vaults/EulerVaultDetails";
-import { computeExplorerFromChainId } from "../utils/ChainUtils";
-import EulerVaultLine from "./vaults/EulerVaultLine";
 import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
+import { getVaultData, VaultData } from "./vaults/EulerVaultDetails";
+import EulerVaultLine from "./vaults/EulerVaultLine";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -211,8 +207,8 @@ const TokenDetail: React.FC = () => {
           </Box>
         </Paper>
 
-        <Grid container spacing={3} sx={{ mt: 3 }}>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={3} sx={{ mt: 3, mb: 3 }}>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 2, md: 0 } }}>
             <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
                 <Typography
@@ -267,23 +263,17 @@ const TokenDetail: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 2, md: 0 } }}>
             <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
                 <Typography
                   variant="h6"
                   gutterBottom
-                  sx={{
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
+                  sx={{ fontWeight: 600, display: "flex", alignItems: "center" }}
                 >
                   <LaunchIcon sx={{ mr: 1 }} />
                   Partners
                 </Typography>
-
-                {/* DEX Section */}
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
@@ -291,12 +281,14 @@ const TokenDetail: React.FC = () => {
                 >
                   DEX
                 </Typography>
-                {VelodromeTradeLink.of(new VelodromeTradeLink("rUSDC", "Swellchain", token.address))}
+                <Box sx={{ mb: 2 }}>
+                  {VelodromeTradeLink.of(new VelodromeTradeLink("rUSDC", "Swellchain", token.address))}
+                </Box>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2 }}>
+        <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2, mb: 3 }}>
           <Typography
             variant="h4"
             component="h1"
