@@ -178,7 +178,7 @@ const TokenDetail: React.FC = () => {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Access the bridge to transfer {token.symbol} tokensA
+                  Access the bridge to transfer {token.symbol}
                 </Typography>
                 {token.isOFT && (
                   <Box
@@ -228,39 +228,51 @@ const TokenDetail: React.FC = () => {
                   <LaunchIcon sx={{ mr: 1 }} />
                   Partners
                 </Typography>
-                <Typography>DEX</Typography>
-                {TradeLinkType.of(
-                  new VelodromeTradeLink(
-                    token.symbol,
-                    token.network,
-                    token.L2TokenAddress
-                  )
-                )}
-                <Typography>Lending Venues</Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  Lend and borrow on Euler
+
+                {/* DEX Section */}
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}>
+                  DEX
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  View liquidity and exchange rUSDC-swell on Velodrome
                 </Typography>
                 <Link
-                  href={"https://app.euler.finance/?asset=rUSDC&network=swellchain"}
+                  href="https://velodrome.finance"
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
                     textDecoration: "none",
                     color: "#1976d2",
                     fontWeight: 500,
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
+                    display: "block",
+                    mb: 2,
+                    "&:hover": { textDecoration: "underline" },
                   }}
                 >
-                  Lend and borrow on Euler →
-                </Link> { /* Lending: Euler, Vesu, Morpho (https://app.hyperbeat.org/earn) */}
-                { /* DEX: Velodrome, Ekubo, Uniswapv3 (https://app.hyperswap.exchange/#/explore/explore-pools) */}
-                {/* {TradeLinkType.of(new EkuboTradeLink(token.symbol))} */}
+                  View on Velodrome &rarr;
+                </Link>
+
+                {/* Lending Venues Section */}
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}>
+                  Lending Venues
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Lend and borrow on Euler
+                </Typography>
+                <Link
+                  href="https://app.euler.finance/?asset=rUSDC&network=swellchain"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    textDecoration: "none",
+                    color: "#1976d2",
+                    fontWeight: 500,
+                    display: "block",
+                    "&:hover": { textDecoration: "underline" },
+                  }}
+                >
+                  Lend and borrow on Euler &rarr;
+                </Link>
               </CardContent>
             </Card>
           </Grid>
