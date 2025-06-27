@@ -23,7 +23,6 @@ import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
 import { TradeLinkType } from "./tradelinks/TradeLink";
-import { EkuboTradeLink } from "./tradelinks/implementations/EkuboTradeLink";
 import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
 
 const TokenDetail: React.FC = () => {

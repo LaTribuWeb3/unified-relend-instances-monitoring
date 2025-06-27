@@ -1,164 +1,137 @@
-# L1 Token List Viewer
+# Unified Relend Instances Monitoring Dashboard
 
-A React application to display a list of L1 tokens by fetching their names directly from the blockchain.
+A modern React TypeScript dashboard for monitoring unified relend instances with environment switching capabilities.
 
-## Features
+## 🚀 Features
 
-- **Dynamic Token Loading**: Reads a list of token contract addresses from `public/mock-input.json`.
-- **On-Chain Data Fetching**: Retrieves the name for each token by calling the `name()` function on its contract.
-- **RPC Configuration**: Uses an RPC URL from the `.env` file to connect to an L1 chain (e.g., Ethereum).
-- **Asynchronous Loading**: Displays a loading indicator while fetching data.
-- **Error Handling**: Shows an error message if data fetching fails.
-- **Responsive Table**: Displays the token address and its fetched name in a clean, responsive table.
+- **Real-time Monitoring**: Track relend instances across different environments
+- **Environment Switching**: Seamlessly switch between L1 and L2 environments
+- **Modern UI**: Built with Material-UI for a professional look and feel
+- **TypeScript**: Full type safety throughout the application
+- **Fast Development**: Powered by Vite for lightning-fast builds and hot reload
 
-## Technology Stack
+## 🛠️ Tech Stack
 
-- **React 18** with TypeScript
-- **Ethers.js v5** for blockchain interaction
-- **Material-UI (MUI)** for UI components
+- **React 18** - Modern React with hooks and concurrent features
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and development server
+- **Material-UI** - Professional UI components
+- **Viem** - Ethereum interaction library
+- **React Router** - Client-side routing
+- **Recharts** - Data visualization
 
-## Getting Started
+## 📦 Installation
 
-### Prerequisites
+1. Clone the repository:
+```bash
+git clone https://github.com/LaTribuWeb3/unified-relend-instances-monitoring.git
+cd unified-relend-instances-monitoring
+```
 
-- Node.js (version 16 or higher)
-- npm or yarn package manager
+2. Install dependencies:
+```bash
+npm install
+```
 
-### Installation
+3. Set up environment variables:
+```bash
+cp env.config.example .env
+```
 
-1.  Clone the repository:
-    ```bash
-    git clone <repository-url>
-    cd unified-relend-instances-monitoring
-    ```
+Edit the `.env` file with your configuration:
+```env
+VITE_L1_RPC_URL=your_l1_rpc_url_here
+VITE_L1_API_ENDPOINT=http://localhost:3001/api/l1
+VITE_L2_API_ENDPOINT=http://localhost:3002/api/l2
+VITE_REFRESH_INTERVAL=30000
+VITE_ENABLE_AUTO_REFRESH=true
+VITE_ENVIRONMENT=development
+VITE_DEBUG_MODE=true
+```
 
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
+## 🚀 Development
 
-3.  **Set up environment variables:**
+Start the development server:
+```bash
+npm run dev
+```
 
-    Create a `.env` file in the root directory by copying the example file:
-    ```bash
-    cp env.config.example .env
-    ```
+The application will be available at `http://localhost:3000`
 
-    Ensure your `.env` file contains the RPC URL for the L1 network you want to query:
-    ```
-    REACT_APP_L1_RPC_URL=https://mainnet.infura.io/v3/YOUR_PROJECT_ID
-    ```
+## 🏗️ Building for Production
 
-4.  **Customize the token list (optional):**
+Build the application:
+```bash
+npm run build
+```
 
-    Edit the `public/mock-input.json` file to add or remove token addresses:
-    ```json
-    [
-      {
-        "L1WrappedTokenAddress": "0x..."
-      },
-      {
-        "L1WrappedTokenAddress": "0x..."
-      }
-    ]
-    ```
+Preview the production build:
+```bash
+npm run preview
+```
 
-5.  Start the development server:
-    ```bash
-    npm start
-    ```
-
-The application will open at `http://localhost:3000`.
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-public/
-└── mock-input.json   # Input file with token addresses
 src/
-├── services/
-│   └── tokenService.ts # Logic for fetching on-chain data
-├── types/
-│   └── index.ts        # TypeScript type definitions
+├── components/          # React components
+│   ├── AddressLink.tsx
+│   ├── TokenDetail.tsx
+│   └── tradelinks/
+├── config/             # Configuration files
+├── services/           # API and data services
+│   └── tokenData/
+├── types/              # TypeScript type definitions
+├── utils/              # Utility functions
 ├── App.tsx             # Main application component
 └── index.tsx           # Application entry point
 ```
 
-## Available Scripts
+## 🔧 Configuration
 
-- `npm start` - Runs the app in development mode
-- `npm build` - Builds the app for production
-- `npm test` - Launches the test runner
-- `npm eject` - Ejects from Create React App (not recommended)
+The application supports multiple environments through environment variables:
 
-## API Integration
+- `VITE_L1_RPC_URL`: Ethereum L1 RPC endpoint
+- `VITE_L1_API_ENDPOINT`: L1 API endpoint
+- `VITE_L2_API_ENDPOINT`: L2 API endpoint
+- `VITE_REFRESH_INTERVAL`: Data refresh interval in milliseconds
+- `VITE_ENABLE_AUTO_REFRESH`: Enable/disable auto-refresh
+- `VITE_ENVIRONMENT`: Current environment (development/production)
+- `VITE_DEBUG_MODE`: Enable debug logging
 
-The dashboard is designed to work with REST APIs. The current implementation includes mock data, but you can easily integrate with real APIs by:
+## 🚀 Deployment
 
-1. Updating the `monitoringService.ts` file
-2. Uncommenting the actual API calls
-3. Ensuring your API returns data in the expected format
+### CloudFlare Pages
 
-### Expected API Response Format
+This project is optimized for CloudFlare Pages deployment. The build process is configured to work seamlessly with CloudFlare's build system.
 
-#### Instances Endpoint
-```json
-[
-  {
-    "id": "string",
-    "name": "string",
-    "status": "healthy|warning|error|offline",
-    "uptime": "number (hours)",
-    "responseTime": "number (milliseconds)",
-    "lastChecked": "ISO date string",
-    "environment": "L1|L2"
-  }
-]
-```
+Build settings for CloudFlare Pages:
+- **Build command**: `npm run build`
+- **Build output directory**: `dist`
+- **Node.js version**: 18 or higher
 
-#### Metrics Endpoint
-```json
-{
-  "totalInstances": "number",
-  "healthyInstances": "number",
-  "warningInstances": "number",
-  "errorInstances": "number",
-  "offlineInstances": "number",
-  "averageResponseTime": "number (milliseconds)",
-  "uptimePercentage": "number (percentage)"
-}
-```
+### Other Platforms
 
-## Customization
+The application can be deployed to any static hosting platform:
 
-### Adding New Environments
+1. Build the application: `npm run build`
+2. Deploy the `dist` folder to your hosting provider
 
-To add new environments, update the `environments.ts` configuration file:
-
-```typescript
-export const environments: EnvironmentConfig[] = [
-  // ... existing environments
-  {
-    name: 'L3',
-    displayName: 'Level 3 Environment',
-    color: '#FF5722',
-    apiEndpoint: process.env.REACT_APP_L3_API_ENDPOINT || 'http://localhost:3003/api/l3'
-  }
-];
-```
-
-### Styling
-
-The application uses Material-UI theming. You can customize the theme by modifying the `theme` object in `App.tsx`.
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin feature/your-feature`
 5. Submit a pull request
 
-## License
+## 📄 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔗 Links
+
+- [Relend Network](https://relend.network)
+- [Material-UI Documentation](https://mui.com/)
+- [Vite Documentation](https://vitejs.dev/)
+- [Viem Documentation](https://viem.sh/)
