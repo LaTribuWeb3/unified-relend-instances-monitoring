@@ -1,6 +1,11 @@
 import { ERC20DataComputer } from "../ERC20DataComputer";
+import { TokenDefinition } from "../../../../../../types";
 
 export class EthereumDataComputer extends ERC20DataComputer {
+  constructor(tokenDefinition: TokenDefinition) {
+    super(tokenDefinition);
+  }
+
   getRpcUrl(): string {
     const rpcUrl = import.meta.env.VITE_L1_RPC_URL;
     if (!rpcUrl) {

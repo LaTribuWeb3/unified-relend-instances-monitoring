@@ -5,7 +5,7 @@ import { TokenDataComputer } from "../../TokenDataComputer";
 
 export abstract class ERC20DataComputer extends TokenDataComputer {
   private provider: PublicClient;
-  private address = this.tokenDefinition.L1WrappedTokenAddress;
+  private address: string;
   private ERC20_ABI = [
     {
       "type": "function",
@@ -38,10 +38,15 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
       "outputs": [{ "type": "uint256" }]
     }
   ];
-  private underlyingTokenAddress = this.tokenDefinition.L1UnderlyingTokenAddress;
+  private underlyingTokenAddress: string;
 
   constructor(private tokenDefinition: TokenDefinition) {
     super();
+    
+    // Initialize properties after constructor
+    this.address = tokenDefinition.L1WrappedTokenAddress;
+    this.underlyingTokenAddress = tokenDefinition.L1UnderlyingTokenAddress;
+    
     this.provider = createPublicClient({
       chain: mainnet,
       transport: http(this.getRpcUrl()),

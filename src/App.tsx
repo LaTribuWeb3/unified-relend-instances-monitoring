@@ -62,6 +62,7 @@ function TokenList() {
       const data = await tokenService.fetchTokenData();
       setTokens(data);
     } catch (err: any) {
+      console.error("[DEBUG] Error in loadTokenData:", err);
       setError(err.message || 'Failed to load token data.');
     } finally {
       setLoading(false);

@@ -85,6 +85,7 @@ export const tokenService = {
           error
         );
       }
+      
       return {
         address: tokenDefinition.L1WrappedTokenAddress,
         L2TokenAddress: tokenDefinition.L2TokenAddress,
