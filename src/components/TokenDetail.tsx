@@ -336,20 +336,12 @@ const TokenDetail: React.FC = () => {
               >
                 Lending Markets
               </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  overflowX: "auto",
-                  gap: 2,
-                  pb: 2,
-                }}
-              >
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                 {vaultsData.map((vault, index) => (
                   <Card
                     key={index}
                     sx={{
-                      flex: "0 0 auto",
+                      width: '100%',
                       borderRadius: 2,
                       boxShadow: 2,
                       p: 2,
@@ -358,45 +350,24 @@ const TokenDetail: React.FC = () => {
                       justifyContent: "center",
                       alignItems: "flex-start",
                       transition: "transform 0.2s, box-shadow 0.2s",
-                      "&:hover": {
-                        transform: "translateY(-2px)",
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
                         boxShadow: 4,
                       },
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mb: 1,
-                      }}
-                    >
-                      <VaultIcon
-                        sx={{
-                          mr: 1,
-                          color: "primary.main",
-                          fontSize: 20,
-                        }}
-                      />
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontWeight: 600, color: "text.secondary" }}
-                      >
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                      <VaultIcon sx={{ mr: 1, color: "primary.main", fontSize: 20 }} />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600, color: "text.secondary" }}>
                         Vault #{index + 1}
                       </Typography>
                     </Box>
                     <Box sx={{ mb: 1 }}>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ display: "block", mb: 0.5 }}
-                      >
+                      <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.5 }}>
                         Address
                       </Typography>
                       <Link
-                        href={`${computeExplorerFromChainId(vault.chainId)}${
-                          vault.address
-                        }`}
+                        href={`${computeExplorerFromChainId(vault.chainId)}${vault.address}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{
@@ -408,94 +379,29 @@ const TokenDetail: React.FC = () => {
                           wordBreak: "break-all",
                         }}
                       >
-                        {vault.address.slice(0, 8)}...
-                        {vault.address.slice(-6)}
+                        {vault.address.slice(0, 8)}...{vault.address.slice(-6)}
                       </Link>
                     </Box>
-                    {/* Metrics in a single line */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 3,
-                        width: "100%",
-                      }}
-                    >
+                    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 3, width: "100%" }}>
                       <Box>
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          sx={{ display: "block" }}
-                        >
-                          Supply
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontFamily: "monospace",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {vaultsLoading ? "..." : vault.totalSupply}
-                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>Supply</Typography>
+                        <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600 }}>{vaultsLoading ? "..." : vault.totalSupply}</Typography>
                       </Box>
                       <Box>
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          sx={{ display: "block" }}
-                        >
-                          Borrows
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontFamily: "monospace",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {vaultsLoading ? "..." : vault.totalBorrows}
-                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>Borrows</Typography>
+                        <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600 }}>{vaultsLoading ? "..." : vault.totalBorrows}</Typography>
                       </Box>
                       <Box>
-                        <Typography
-                          variant="caption"
-                          color="text.secondary"
-                          sx={{ display: "block" }}
-                        >
-                          Cap
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontFamily: "monospace",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {vaultsLoading ? "..." : vault.borrowCap}
-                        </Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>Cap</Typography>
+                        <Typography variant="body2" sx={{ fontFamily: "monospace", fontWeight: 600 }}>{vaultsLoading ? "..." : vault.borrowCap}</Typography>
                       </Box>
                     </Box>
-                    {/* Arrow button to Euler vault page */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        width: "100%",
-                        mt: 2,
-                      }}
-                    >
+                    <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%", mt: 2 }}>
                       <Link
                         href={`https://app.euler.finance/vault/${vault.address}?network=swellchain`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          color: "primary.main",
-                          textDecoration: "none",
-                        }}
+                        sx={{ display: "flex", alignItems: "center", color: "primary.main", textDecoration: "none" }}
                       >
                         <ArrowForwardIcon />
                       </Link>
