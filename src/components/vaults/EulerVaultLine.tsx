@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Box, Typography, Link } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import { computeExplorerFromChainId } from "../../utils/ChainUtils";
 
 interface EulerVaultLineProps {
@@ -34,9 +33,13 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({ index, vault, vaultsLoa
       },
     }}
   >
-    {/* Vault Icon and Number */}
+    {/* Euler Logo and Number */}
     <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 120 }}>
-      <AccountBalanceIcon sx={{ mr: 1, color: 'primary.main', fontSize: 20 }} />
+      <img
+        src="https://docs.euler.finance/img/logo.svg"
+        alt="Euler Logo"
+        style={{ height: 24, width: 24, marginRight: 8, verticalAlign: 'middle' }}
+      />
       <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'text.secondary' }}>
         Vault #{index + 1}
       </Typography>
