@@ -11,6 +11,6 @@ export class VelodromeTradeLink extends TradeLinkType {
   }
 
   getTradeLink() {
-    return `https://velodrome.finance/liquidity?filters=${this.network}&query=${this.tokenAddress}`;
+    return `https://velodrome.finance/liquidity?filters=${this.network}&query=${this.symbol}`;
   }
 }

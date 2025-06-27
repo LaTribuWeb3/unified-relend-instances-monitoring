@@ -28,6 +28,7 @@ import AddressLink from "./AddressLink";
 import { getVaultData, VaultData } from "./vaults/EulerVaultDetails";
 import { computeExplorerFromChainId } from "../utils/ChainUtils";
 import EulerVaultLine from "./vaults/EulerVaultLine";
+import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -290,28 +291,7 @@ const TokenDetail: React.FC = () => {
                 >
                   DEX
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1 }}
-                >
-                  View liquidity and exchange rUSDC-swell on Velodrome
-                </Typography>
-                <Link
-                  href="https://velodrome.finance"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    textDecoration: "none",
-                    color: "#1976d2",
-                    fontWeight: 500,
-                    display: "block",
-                    mb: 2,
-                    "&:hover": { textDecoration: "underline" },
-                  }}
-                >
-                  View on Velodrome &rarr;
-                </Link>
+                {VelodromeTradeLink.of(new VelodromeTradeLink("rUSDC", "Swellchain", token.address))}
               </CardContent>
             </Card>
           </Grid>
