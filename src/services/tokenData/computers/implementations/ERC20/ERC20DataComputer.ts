@@ -59,7 +59,6 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
       abi: this.ERC20_ABI,
       functionName: "name",
     })) as string;
-    console.log("name", name);
     return name;
   }
 
@@ -69,7 +68,6 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
       abi: this.ERC20_ABI,
       functionName: "symbol",
     })) as string;
-    console.log("symbol", symbol);
     return symbol;
   }
 
@@ -84,8 +82,6 @@ export abstract class ERC20DataComputer extends TokenDataComputer {
       abi: this.ERC20_ABI,
       functionName: "decimals",
     })) as bigint;
-    console.log("totalSupply", totalSupply);
-    console.log("decimals", decimals);
     return Number(totalSupply) / 10 ** Number(decimals);
   }
 

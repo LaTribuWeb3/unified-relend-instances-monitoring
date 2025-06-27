@@ -8,25 +8,25 @@ export const EulerVaultDetails = async ({ vaultAddress }: { vaultAddress: string
     transport: http(),
   });
 
-  const totalSupply = await client.readContract({
+  const swellEulerVaultContract = {
     address: vaultAddress as `0x${string}`,
-    abi: swellEulerVaultAbi,
+    abi: swellEulerVaultAbi
+  }
+
+  const totalSupply = await client.readContract({
+    ...swellEulerVaultContract,
     functionName: "totalSupply",
   }) as bigint;
 
   const borrow = await client.readContract({
-    address: vaultAddress as `0x${string}`,
-    abi: swellEulerVaultAbi,
+    ...swellEulerVaultContract,
     functionName: "totalBorrows",
   }) as bigint;
 
   const caps = await client.readContract({
-    address: vaultAddress as `0x${string}`,
-    abi: swellEulerVaultAbi,
+    ...swellEulerVaultContract,
     functionName: "caps",
-  })
+  }) as [number, number];
   
-  const capsTest = caps as {supplyCap: number, borrowCap: number};
-  
-  return <div>EulerVaultDetails on vault {vaultAddress} with supply {totalSupply.toString()} and borrow {borrow.toString()} on a max borrow of {capsTest.borrowCap}</div>;
+  return <div>EulerVaultDetails on vault {vaultAddress} with supply {totalSupply.toString()} and borrow {borrow.toString()} on a max borrow of {caps[1]}</div>;
 };

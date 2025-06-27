@@ -64,7 +64,7 @@ const TokenDetail: React.FC = () => {
 
     const loadVaultsDetails = async () => {
       const vaultsDetails = await Promise.all(
-        token.lending.map(async (lending) => {
+        token.lending.map(async (lending, index) => {
           return await EulerVaultDetails({ vaultAddress: lending.address })
         })
       );
@@ -290,7 +290,11 @@ const TokenDetail: React.FC = () => {
                 >
                   Lend and borrow on Euler
                 </Typography>
-                {vaultsDetails}
+                {vaultsDetails.map((vaultDetail, index) => (
+                  <div key={index}>
+                    {vaultDetail}
+                  </div>
+                ))}
                 <Link
                   href="https://app.euler.finance/?asset=rUSDC&network=swellchain"
                   target="_blank"
