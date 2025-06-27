@@ -100,6 +100,7 @@ export const tokenService = {
         L2BridgeAddress: tokenDefinition.L2BridgeAddress,
         L2ChainID: tokenDefinition.L2ChainID,
         isOFT: tokenDefinition.L2TokenIsOFT,
+        lending: tokenDefinition.lending
       };
     });
 

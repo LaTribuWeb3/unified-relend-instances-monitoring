@@ -99,4 +99,5 @@ export interface TokenData {
   L2TokenAddress: string;
   L2BridgeAddress: string;
   isOFT: boolean;
+  lending: { type: string; address: string }[];
 }

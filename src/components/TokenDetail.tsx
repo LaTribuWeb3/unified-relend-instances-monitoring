@@ -22,6 +22,7 @@ import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
+import { EulerVaultDetails } from "./vaults/EulerVaultDetails";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -29,6 +30,7 @@ const TokenDetail: React.FC = () => {
   const [token, setToken] = useState<TokenData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [vaultsDetails, setVaultsDetails] = useState<React.ReactNode[]>([]);
 
   useEffect(() => {
     const loadTokenData = async () => {
@@ -56,6 +58,21 @@ const TokenDetail: React.FC = () => {
 
     loadTokenData();
   }, [address]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const loadVaultsDetails = async () => {
+      const vaultsDetails = await Promise.all(
+        token.lending.map(async (lending) => {
+          return await EulerVaultDetails({ vaultAddress: lending.address })
+        })
+      );
+      setVaultsDetails(vaultsDetails);
+    };
+
+    loadVaultsDetails();
+  }, [token]);
 
   const handleBack = () => {
     navigate("/");
@@ -273,6 +290,7 @@ const TokenDetail: React.FC = () => {
                 >
                   Lend and borrow on Euler
                 </Typography>
+                {vaultsDetails}
                 <Link
                   href="https://app.euler.finance/?asset=rUSDC&network=swellchain"
                   target="_blank"
@@ -290,7 +308,6 @@ const TokenDetail: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-          
         </Grid>
       </Container>
     </Box>
