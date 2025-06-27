@@ -2,6 +2,7 @@ import {
   ArrowBack as ArrowBackIcon,
   Launch as LaunchIcon,
   AccountBalance as VaultIcon,
+  ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -396,25 +397,22 @@ const TokenDetail: React.FC = () => {
                               <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{vaultsLoading ? '...' : vault.borrowCap}</Typography>
                             </Box>
                           </Box>
+                          {/* Arrow button to Euler vault page */}
+                          <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', mt: 2 }}>
+                            <Link
+                              href={`https://app.euler.finance/vault/${vault.address}?network=swellchain`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              sx={{ display: 'flex', alignItems: 'center', color: 'primary.main', textDecoration: 'none' }}
+                            >
+                              <ArrowForwardIcon />
+                            </Link>
+                          </Box>
                         </Card>
                       ))}
                     </Box>
                   </Box>
                 )}
-                <Link
-                  href="https://app.euler.finance/?asset=rUSDC&network=swellchain"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    textDecoration: "none",
-                    color: "#1976d2",
-                    fontWeight: 500,
-                    display: "block",
-                    "&:hover": { textDecoration: "underline" },
-                  }}
-                >
-                  Lend and borrow on Euler &rarr;
-                </Link>
               </CardContent>
             </Card>
           </Grid>
