@@ -179,41 +179,38 @@ const TokenDetail: React.FC = () => {
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Access the bridge to transfer {token.symbol} tokens
+                  Access the bridge to transfer {token.symbol} tokensA
                 </Typography>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>L1 Bridge contract:</strong>{" "}
-                    <AddressLink
-                      address={token.L1BridgeAddress}
-                      chainId={mainnet.id}
-                    />
-                  </Typography>
+                {token.isOFT && (
+                  <Box
+                    component="img"
+                    src="https://layerzero.network/static/logo.svg"
+                    alt="LayerZero"
+                    sx={{
+                      height: 32,
+                      width: "auto",
+                      mb: 2,
+                      filter: "brightness(0)",
+                    }}
+                  />
+                )}
+                <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+                  <Link
+                    href={token.bridgeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      textDecoration: "none",
+                      color: "#1976d2",
+                      fontWeight: 500,
+                      "&:hover": {
+                        textDecoration: "underline",
+                      },
+                    }}
+                  >
+                    Open Bridge →
+                  </Link>
                 </Box>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="body2" sx={{ mb: 1 }}>
-                    <strong>L2 Bridge contract:</strong>{" "}
-                    <AddressLink
-                      address={token.L2BridgeAddress}
-                      chainId={token.L2ChainID}
-                    />
-                  </Typography>
-                </Box>
-                <Link
-                  href={token.bridgeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    textDecoration: "none",
-                    color: "#1976d2",
-                    fontWeight: 500,
-                    "&:hover": {
-                      textDecoration: "underline",
-                    },
-                  }}
-                >
-                  Open Bridge →
-                </Link>
               </CardContent>
             </Card>
           </Grid>

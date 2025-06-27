@@ -97,4 +97,5 @@ export interface TokenData {
   L2ChainID: number;
   L2TokenAddress: string;
   L2BridgeAddress: string;
+  isOFT: boolean;
 } 
