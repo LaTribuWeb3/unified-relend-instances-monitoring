@@ -1,11 +1,11 @@
-export type Environment = 'L1' | 'L2';
+export type Environment = "L1" | "L2";
 
-export type Token = 'Sonic' | 'Swell';
+export type Token = "Sonic" | "Swell";
 
 export interface MonitoringData {
   id: string;
   name: string;
-  status: 'healthy' | 'warning' | 'error' | 'offline';
+  status: "healthy" | "warning" | "error" | "offline";
   uptime: number;
   responseTime: number;
   lastChecked: string;
@@ -63,9 +63,10 @@ export interface TokenDefinition {
   network: Network;
   L1BridgeAddress: string;
   L2BridgeAddress: string;
+  lending: { type: string; address: string }[];
 }
 
-export type Network = 'Ethereum' | 'Swell' | 'Sonic' | 'Bitlayer';
+export type Network = "Ethereum" | "Swell" | "Sonic" | "Bitlayer";
 
 export interface MockTokenInfo {
   name: string;
@@ -98,4 +99,4 @@ export interface TokenData {
   L2TokenAddress: string;
   L2BridgeAddress: string;
   isOFT: boolean;
-} 
+}
