@@ -227,8 +227,9 @@ const TokenDetail: React.FC = () => {
                   }}
                 >
                   <LaunchIcon sx={{ mr: 1 }} />
-                  Decentralized Exchange
+                  Partners
                 </Typography>
+                <Typography>DEX</Typography>
                 {TradeLinkType.of(
                   new VelodromeTradeLink(
                     token.symbol,
@@ -236,7 +237,31 @@ const TokenDetail: React.FC = () => {
                     token.L2TokenAddress
                   )
                 )}
-                {TradeLinkType.of(new EkuboTradeLink(token.symbol))}
+                <Typography>Lending Venues</Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  Lend and borrow on Euler
+                </Typography>
+                <Link
+                  href={"https://app.euler.finance/?asset=rUSDC&network=swellchain"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    textDecoration: "none",
+                    color: "#1976d2",
+                    fontWeight: 500,
+                    "&:hover": {
+                      textDecoration: "underline",
+                    },
+                  }}
+                >
+                  Lend and borrow on Euler →
+                </Link> { /* Lending: Euler, Vesu, Morpho (https://app.hyperbeat.org/earn) */}
+                { /* DEX: Velodrome, Ekubo, Uniswapv3 (https://app.hyperswap.exchange/#/explore/explore-pools) */}
+                {/* {TradeLinkType.of(new EkuboTradeLink(token.symbol))} */}
               </CardContent>
             </Card>
           </Grid>

@@ -14,7 +14,7 @@ export abstract class TradeLinkType {
     return (
       <>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          View liquidity and trade {tradeLinkType.symbol} on {tradeLinkType.exchangeName}
+          View liquidity and exchange {tradeLinkType.symbol} on {tradeLinkType.exchangeName}
         </Typography>
         <Link
           href={tradeLinkType.getTradeLink()}
