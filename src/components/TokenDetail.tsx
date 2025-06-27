@@ -228,10 +228,18 @@ const TokenDetail: React.FC = () => {
                 </Typography>
 
                 {/* DEX Section */}
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}
+                >
                   DEX
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
                   View liquidity and exchange rUSDC-swell on Velodrome
                 </Typography>
                 <Link
@@ -251,10 +259,18 @@ const TokenDetail: React.FC = () => {
                 </Link>
 
                 {/* Lending Venues Section */}
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}
+                >
                   Lending Venues
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
                   Lend and borrow on Euler
                 </Typography>
                 <Link
@@ -274,6 +290,7 @@ const TokenDetail: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
+          
         </Grid>
       </Container>
     </Box>
