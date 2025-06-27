@@ -22,8 +22,6 @@ import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
-import { TradeLinkType } from "./tradelinks/TradeLink";
-import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
