@@ -3,11 +3,18 @@ import { swellchain } from "viem/chains";
 import { abi as swellEulerVaultAbi } from "../../abis/SwellEulerVault.abi.ts";
 import { FriendlyFormatNumber } from "@/utils/DisplayUtils.ts";
 
-export const EulerVaultDetails = async ({
+export interface VaultData {
+  totalSupply: string;
+  totalBorrows: string;
+  borrowCap: string;
+  decimals: number;
+}
+
+export const getVaultData = async ({
   vaultAddress,
 }: {
   vaultAddress: string;
-}) => {
+}): Promise<VaultData> => {
   const client = createPublicClient({
     chain: swellchain,
     transport: http(),
@@ -38,12 +45,27 @@ export const EulerVaultDetails = async ({
     functionName: "decimals",
   })) as number;
 
+  return {
+    totalSupply: FriendlyFormatNumber(Number(totalSupply.toString()) / 10 ** decimals),
+    totalBorrows: FriendlyFormatNumber(Number(borrow.toString()) / 10 ** decimals),
+    borrowCap: FriendlyFormatNumber(caps[1]),
+    decimals,
+  };
+};
+
+export const EulerVaultDetails = async ({
+  vaultAddress,
+}: {
+  vaultAddress: string;
+}) => {
+  const vaultData = await getVaultData({ vaultAddress });
+
   return (
     <div>
       EulerVaultDetails on vault {vaultAddress} with supply{" "}
-      {FriendlyFormatNumber(Number(totalSupply.toString()) / 10 ** decimals)} and borrow{" "}
-      {FriendlyFormatNumber(Number(borrow.toString()) / 10 ** decimals)} on a max borrow of{" "}
-      {FriendlyFormatNumber(caps[1])}
+      {vaultData.totalSupply} and borrow{" "}
+      {vaultData.totalBorrows} on a max borrow of{" "}
+      {vaultData.borrowCap}
     </div>
   );
 };
