@@ -1,6 +1,5 @@
 import {
-  ArrowBack as ArrowBackIcon,
-  Launch as LaunchIcon,
+  ArrowBack as ArrowBackIcon
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -10,27 +9,24 @@ import {
   CardContent,
   Container,
   Grid,
-  Link,
   Paper,
   Toolbar,
-  Typography,
+  Typography
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
-import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
-import AddressLink from "./AddressLink";
-import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
+import BridgeDisplay from "./bridge/BridgeDisplay";
+import PartnersDisplay from "./partners/PartnersDisplay";
+import TokenInformation from "./token-info/TokenInformation";
 import {
   getVaultData,
   RawVaultData,
   VaultData,
 } from "./vaults/EulerVaultDetails";
 import { LendingVenues } from "./venues/LendingVenues";
-import DexDisplay from "./dex/DexDisplay";
 
 const L2DeploymentDetails: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -175,110 +171,21 @@ const L2DeploymentDetails: React.FC = () => {
             {token.name}
           </Typography>
 
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-              Token Information
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Symbol:</strong> {token.symbol}
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Network:</strong> {token.network}
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Address:</strong>{" "}
-              <AddressLink address={token.address} chainId={mainnet.id} />
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>L2 Token Address:</strong>{" "}
-              <AddressLink
-                address={token.L2TokenAddress}
-                chainId={token.L2ChainID}
-              />
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Total Supply:</strong>{" "}
-              {FriendlyFormatNumber(Number(token.totalSupply))}
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Total Supply USDC:</strong>{" "}
-              {FriendlyFormatNumber(Number(token.totalSupplyUSDC))}
-            </Typography>
-          </Box>
+          <TokenInformation token={token} />
         </Paper>
 
         <Grid container spacing={3} sx={{ mt: 3, mb: 3 }}>
           <Grid item xs={12} md={6} sx={{ mb: { xs: 2, md: 0 } }}>
             <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <LaunchIcon sx={{ mr: 1 }} />
-                  Bridge
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  Access the bridge to transfer {token.symbol}
-                </Typography>
-                {token.isOFT && (
-                  <Box
-                    component="img"
-                    src="https://layerzero.network/static/logo.svg"
-                    alt="LayerZero"
-                    sx={{
-                      height: 32,
-                      width: "auto",
-                      mb: 2,
-                      filter: "brightness(0)",
-                    }}
-                  />
-                )}
-                <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-                  <Link
-                    href={token.bridgeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={{
-                      textDecoration: "none",
-                      color: "#1976d2",
-                      fontWeight: 500,
-                      "&:hover": {
-                        textDecoration: "underline",
-                      },
-                    }}
-                  >
-                    Open Bridge →
-                  </Link>
-                </Box>
+                <BridgeDisplay token={token} />
               </CardContent>
             </Card>
           </Grid>
           <Grid item xs={12} md={6} sx={{ mb: { xs: 2, md: 0 } }}>
             <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
               <CardContent>
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  sx={{
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <LaunchIcon sx={{ mr: 1 }} />
-                  Partners
-                </Typography>
-                <DexDisplay token={token} />
+                <PartnersDisplay token={token} />
               </CardContent>
             </Card>
           </Grid>
