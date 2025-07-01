@@ -3,6 +3,14 @@ import { swellchain } from "viem/chains";
 import { abi as swellEulerVaultAbi } from "../../abis/SwellEulerVault.abi.ts";
 import { FriendlyFormatNumber } from "@/utils/DisplayUtils.ts";
 
+export type RawVaultData = {
+  address: string;
+  totalSupply: string;
+  totalBorrows: string;
+  borrowCap: string;
+  chainId: number;
+};
+
 export interface VaultData {
   totalSupply: string;
   totalBorrows: string;

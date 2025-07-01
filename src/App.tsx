@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 
 import { mainnet } from 'viem/chains';
-import TokenDetail from './components/TokenDetail';
+import L2DeploymentDetails from './components/L2DeploymentDetails';
 import { tokenService } from './services/tokenService';
 import { TokenData } from './types';
 import { computeExplorerFromChainId } from './utils/ChainUtils';
@@ -179,7 +179,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<TokenList />} />
-          <Route path="/token/:address" element={<TokenDetail />} />
+          <Route path="/token/:address" element={<L2DeploymentDetails />} />
         </Routes>
       </Router>
     </ThemeProvider>

@@ -1,6 +1,6 @@
 import {
   ArrowBack as ArrowBackIcon,
-  Launch as LaunchIcon
+  Launch as LaunchIcon,
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -13,35 +13,32 @@ import {
   Link,
   Paper,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
 import { mainnet } from "viem/chains";
 import { tokenService } from "../services/tokenService";
 import { TokenData } from "../types";
 import AddressLink from "./AddressLink";
 import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
-import { getVaultData, VaultData } from "./vaults/EulerVaultDetails";
-import EulerVaultLine from "./vaults/EulerVaultLine";
-import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
+import {
+  getVaultData,
+  RawVaultData,
+  VaultData,
+} from "./vaults/EulerVaultDetails";
+import { LendingVenues } from "./venues/LendingVenues";
+import DexDisplay from "./dex/DexDisplay";
 
-const TokenDetail: React.FC = () => {
+const L2DeploymentDetails: React.FC = () => {
   const { address } = useParams<{ address: string }>();
   const navigate = useNavigate();
   const [token, setToken] = useState<TokenData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [vaultsData, setVaultsData] = useState<
-    {
-      address: string;
-      totalSupply: string;
-      totalBorrows: string;
-      borrowCap: string;
-      chainId: number;
-    }[]
-  >([]);
+  const [vaultsData, setVaultsData] = useState<RawVaultData[]>([]);
   const [vaultsLoading, setVaultsLoading] = useState(false);
 
   useEffect(() => {
@@ -200,10 +197,12 @@ const TokenDetail: React.FC = () => {
               />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Total Supply:</strong> {FriendlyFormatNumber(Number(token.totalSupply))}
+              <strong>Total Supply:</strong>{" "}
+              {FriendlyFormatNumber(Number(token.totalSupply))}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Total Supply USDC:</strong> {FriendlyFormatNumber(Number(token.totalSupplyUSDC))}
+              <strong>Total Supply USDC:</strong>{" "}
+              {FriendlyFormatNumber(Number(token.totalSupplyUSDC))}
             </Typography>
           </Box>
         </Paper>
@@ -270,57 +269,24 @@ const TokenDetail: React.FC = () => {
                 <Typography
                   variant="h6"
                   gutterBottom
-                  sx={{ fontWeight: 600, display: "flex", alignItems: "center" }}
+                  sx={{
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
                   <LaunchIcon sx={{ mr: 1 }} />
                   Partners
                 </Typography>
-                <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}
-                >
-                  DEX
-                </Typography>
-                <Box sx={{ mb: 2 }}>
-                  {VelodromeTradeLink.of(new VelodromeTradeLink("rUSDC", "Swellchain", token.address))}
-                </Box>
+                <DexDisplay token={token} />
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2, mb: 3 }}>
-          <Typography
-            variant="h4"
-            component="h1"
-            gutterBottom
-            sx={{ fontWeight: 700 }}
-          >
-            Lending Venues
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            Lend and borrow on Euler
-          </Typography>
-          {vaultsData.length > 0 && (
-            <Box sx={{ mt: 4 }}>
-              <Typography
-                variant="h6"
-                gutterBottom
-                sx={{ fontWeight: 600, mb: 2 }}
-              >
-                Lending Markets
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                {vaultsData.map((vault, index) => (
-                  <EulerVaultLine key={index} index={index} vault={vault} vaultsLoading={vaultsLoading} />
-                ))}
-              </Box>
-            </Box>
-          )}
-        </Paper>
+        <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} />
       </Container>
     </Box>
   );
 };
 
-export default TokenDetail;
+export default L2DeploymentDetails;
