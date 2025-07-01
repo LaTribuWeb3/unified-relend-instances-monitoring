@@ -25,6 +25,7 @@ import AddressLink from "./AddressLink";
 import { VelodromeTradeLink } from "./tradelinks/implementations/VelodromeTradeLink";
 import { getVaultData, VaultData } from "./vaults/EulerVaultDetails";
 import EulerVaultLine from "./vaults/EulerVaultLine";
+import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
 
 const TokenDetail: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -199,10 +200,10 @@ const TokenDetail: React.FC = () => {
               />
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Total Supply:</strong> {token.totalSupply}
+              <strong>Total Supply:</strong> {FriendlyFormatNumber(Number(token.totalSupply))}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Total Supply USDC:</strong> {token.totalSupplyUSDC}
+              <strong>Total Supply USDC:</strong> {FriendlyFormatNumber(Number(token.totalSupplyUSDC))}
             </Typography>
           </Box>
         </Paper>
