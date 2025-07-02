@@ -107,6 +107,41 @@ const L2DeploymentDetails: React.FC = () => {
     loadVaultsDetails();
   }, [token]);
 
+  useEffect(() => {
+    if (!token) return;
+
+    const loadPoolsDetails = async () => {
+      setPoolsLoading(true);
+      try {
+        const poolsDetails = await Promise.all(
+          token.pools.map(async (pool) => {
+            let returnValue: PoolData = {
+              address: pool.address,
+              name: pool.name,
+              poolTokenData: pool.poolTokenData,
+            };
+
+            try {
+              const poolData: PoolData = await getPoolData({
+                poolAddress: pool.address,
+              });
+              returnValue.poolTokenData = poolData.poolTokenData;
+            } catch (error) {
+              console.log("Error when fetching pool " + pool.address);
+            }
+
+            return returnValue;
+          })
+        );
+        setPoolsData(poolsDetails);
+      } finally {
+        setPoolsLoading(false);
+      }
+    };
+
+    loadPoolsDetails();
+  }, [token]);
+
   const handleBack = () => {
     navigate("/");
   };
