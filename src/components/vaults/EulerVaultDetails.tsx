@@ -1,9 +1,9 @@
+import { PoolData, PoolTokenData } from "@/types/index.ts";
+import { FriendlyFormatNumber } from "@/utils/DisplayUtils.ts";
 import { createPublicClient, http } from "viem";
 import { swellchain } from "viem/chains";
-import { abi as swellEulerVaultAbi } from "../../abis/SwellEulerVault.abi.ts";
 import { abi as CLPoolAbi } from "../../abis/CLPool.abi.ts";
-import { FriendlyFormatNumber } from "@/utils/DisplayUtils.ts";
-import { PoolData, PoolTokenData, TokenData } from "@/types/index.ts";
+import { abi as swellEulerVaultAbi } from "../../abis/SwellEulerVault.abi.ts";
 import { abi as USDeOFTAbi } from "../../abis/USDeOFT.abi.ts";
 
 export type RawVaultData = {
