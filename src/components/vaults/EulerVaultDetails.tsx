@@ -2,6 +2,7 @@ import { createPublicClient, http } from "viem";
 import { swellchain } from "viem/chains";
 import { abi as swellEulerVaultAbi } from "../../abis/SwellEulerVault.abi.ts";
 import { FriendlyFormatNumber } from "@/utils/DisplayUtils.ts";
+import { PoolData } from "@/types/index.ts";
 
 export type RawVaultData = {
   address: string;
@@ -58,6 +59,18 @@ export const getVaultData = async ({
     totalBorrows: FriendlyFormatNumber(Number(borrow.toString()) / 10 ** decimals),
     borrowCap: FriendlyFormatNumber(caps[1]),
     decimals,
+  };
+};
+
+export const getPoolData = async ({
+  poolAddress,
+}: {
+  poolAddress: string;
+}): Promise<PoolData> => {
+  return {
+    address: poolAddress,
+    name: "Pool name",
+    poolTokenData: [],
   };
 };
 

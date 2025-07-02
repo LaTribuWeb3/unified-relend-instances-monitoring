@@ -9,6 +9,7 @@ export const LendingVenues = ({
   vaultsData: RawVaultData[];
   vaultsLoading: boolean;
 }) => {
+
   return (
     <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2, mb: 3 }}>
       <Typography
@@ -22,7 +23,8 @@ export const LendingVenues = ({
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
         Lend and borrow on Euler
       </Typography>
-      {vaultsData.length > 0 && (
+      {vaultsLoading && <div>Loading...</div>}
+      {vaultsData.length > 0 && !vaultsLoading && (
         <Box sx={{ mt: 4 }}>
           <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
             Lending Markets

@@ -17,16 +17,18 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { tokenService } from "../services/tokenService";
-import { TokenData } from "../types";
+import { PoolData, TokenData } from "../types";
 import BridgeDisplay from "./bridge/BridgeDisplay";
 import PartnersDisplay from "./partners/PartnersDisplay";
 import TokenInformation from "./token-info/TokenInformation";
 import {
+  getPoolData,
   getVaultData,
   RawVaultData,
   VaultData,
 } from "./vaults/EulerVaultDetails";
 import { LendingVenues } from "./venues/LendingVenues";
+import { Pools } from "./pools/Pools";
 
 const L2DeploymentDetails: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -36,6 +38,8 @@ const L2DeploymentDetails: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [vaultsData, setVaultsData] = useState<RawVaultData[]>([]);
   const [vaultsLoading, setVaultsLoading] = useState(false);
+  const [poolsData, setPoolsData] = useState<PoolData[]>([]);
+  const [poolsLoading, setPoolsLoading] = useState(false);
 
   useEffect(() => {
     const loadTokenData = async () => {
@@ -72,26 +76,26 @@ const L2DeploymentDetails: React.FC = () => {
       try {
         const vaultsDetails = await Promise.all(
           token.lending.map(async (lending) => {
+            let returnValue = {
+              address: lending.address,
+              totalSupply: "Error",
+              totalBorrows: "Error",
+              borrowCap: "Error",
+              chainId: token.L2ChainID,
+            };
+
             try {
               const vaultData: VaultData = await getVaultData({
                 vaultAddress: lending.address,
               });
-              return {
-                address: lending.address,
-                totalSupply: vaultData.totalSupply,
-                totalBorrows: vaultData.totalBorrows,
-                borrowCap: vaultData.borrowCap,
-                chainId: token.L2ChainID,
-              };
+              returnValue.totalSupply = vaultData.totalSupply;
+              returnValue.totalBorrows = vaultData.totalBorrows;
+              returnValue.borrowCap = vaultData.borrowCap;
             } catch (error) {
-              return {
-                address: lending.address,
-                totalSupply: "Error",
-                totalBorrows: "Error",
-                borrowCap: "Error",
-                chainId: token.L2ChainID,
-              };
+              console.log("Error when fetching lending venue " + lending.address);
             }
+
+            return returnValue;
           })
         );
         setVaultsData(vaultsDetails);
@@ -191,6 +195,7 @@ const L2DeploymentDetails: React.FC = () => {
           </Grid>
         </Grid>
         <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} />
+        <Pools poolsData={poolsData} poolsLoading={poolsLoading} />
       </Container>
     </Box>
   );

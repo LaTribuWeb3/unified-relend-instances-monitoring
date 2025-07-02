@@ -86,6 +86,14 @@ export const tokenService = {
         );
       }
       
+      const pools = tokenDefinition.pools.map((poolAddress: string) => {
+        return {
+          address: poolAddress,
+          name: `Pool ${poolAddress.slice(0, 8)}...`,
+          poolTokenData: [],
+        };
+      });
+
       return {
         address: tokenDefinition.L1WrappedTokenAddress,
         L2TokenAddress: tokenDefinition.L2TokenAddress,
@@ -101,6 +109,7 @@ export const tokenService = {
         L2ChainID: tokenDefinition.L2ChainID,
         isOFT: tokenDefinition.L2TokenIsOFT,
         lending: tokenDefinition.lending,
+        pools,
       };
     });
 

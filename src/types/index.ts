@@ -64,6 +64,7 @@ export interface TokenDefinition {
   L1BridgeAddress: string;
   L2BridgeAddress: string;
   lending: { type: string; address: string }[];
+  pools: string[];
 }
 
 export type Network = "Ethereum" | "Swell" | "Sonic" | "Bitlayer";
@@ -100,4 +101,19 @@ export interface TokenData {
   L2BridgeAddress: string;
   isOFT: boolean;
   lending: { type: string; address: string }[];
+  pools: PoolData[];
+}
+
+export interface PoolData {
+  address: string;
+  name: string;
+  poolTokenData: PoolTokenData[]
+}
+
+export interface PoolTokenData {
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  totalSupply: string;
 }
