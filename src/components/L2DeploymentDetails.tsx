@@ -126,6 +126,7 @@ const L2DeploymentDetails: React.FC = () => {
                 poolAddress: pool.address,
               });
               returnValue.poolTokenData = poolData.poolTokenData;
+              returnValue.name = poolData.name;
             } catch (error) {
               console.log("Error when fetching pool " + pool.address);
             }
