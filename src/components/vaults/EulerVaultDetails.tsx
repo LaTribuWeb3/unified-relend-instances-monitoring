@@ -5,6 +5,7 @@ import { swellchain } from "viem/chains";
 import { abi as CLPoolAbi } from "../../abis/CLPool.abi.ts";
 import { abi as swellEulerVaultAbi } from "../../abis/SwellEulerVault.abi.ts";
 import { abi as USDeOFTAbi } from "../../abis/USDeOFT.abi.ts";
+import { decodeCap } from "@/utils/CapUtils.ts";
 
 export type RawVaultData = {
   address: string;
@@ -63,7 +64,7 @@ export const getVaultData = async ({
     totalBorrows: FriendlyFormatNumber(
       Number(borrow.toString()) / 10 ** decimals
     ),
-    borrowCap: FriendlyFormatNumber(caps[1]),
+    borrowCap: FriendlyFormatNumber(Number(decodeCap(caps[1])) / 10 ** decimals),
     decimals,
   };
 };
