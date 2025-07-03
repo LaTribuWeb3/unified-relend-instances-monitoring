@@ -89,7 +89,8 @@ export const tokenService = {
       const pools = tokenDefinition.pools.map((pool: { type: string; address: string }) => {
         return {
           address: pool.address,
-          name: `${pool.type} Pool ${pool.address.slice(0, 8)}...`,
+          type: pool.type,
+          name: `Pool ${pool.address.slice(0, 8)}...`,
           poolTokenData: [],
         };
       });

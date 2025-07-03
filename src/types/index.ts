@@ -106,6 +106,7 @@ export interface TokenData {
 
 export interface PoolData {
   address: string;
+  type: string;
   name: string;
   poolTokenData: PoolTokenData[]
 }

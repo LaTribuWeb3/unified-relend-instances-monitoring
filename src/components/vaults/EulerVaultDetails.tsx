@@ -9,6 +9,7 @@ import { decodeCap } from "@/utils/CapUtils.ts";
 
 export type RawVaultData = {
   address: string;
+  type: string;
   totalSupply: string;
   totalBorrows: string;
   borrowCap: string;
@@ -114,8 +115,10 @@ export const getPoolTokenData = async (
 
 export const getPoolData = async ({
   poolAddress,
+  poolType,
 }: {
   poolAddress: string;
+  poolType: string;
 }): Promise<PoolData> => {
   const client = createPublicClient({
     chain: swellchain,
@@ -134,6 +137,7 @@ export const getPoolData = async ({
   return {
     address: poolAddress,
     name: token0Data.symbol + "/" + token1Data.symbol,
+    type: poolType,
     poolTokenData: [token0Data, token1Data],
   };
 };

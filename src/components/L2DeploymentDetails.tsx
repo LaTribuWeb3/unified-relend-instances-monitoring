@@ -78,6 +78,7 @@ const L2DeploymentDetails: React.FC = () => {
           token.lending.map(async (lending) => {
             let returnValue = {
               address: lending.address,
+              type: lending.type,
               totalSupply: "Error",
               totalBorrows: "Error",
               borrowCap: "Error",
@@ -118,12 +119,14 @@ const L2DeploymentDetails: React.FC = () => {
             let returnValue: PoolData = {
               address: pool.address,
               name: pool.name,
+              type: pool.type,
               poolTokenData: pool.poolTokenData,
             };
 
             try {
               const poolData: PoolData = await getPoolData({
                 poolAddress: pool.address,
+                poolType: pool.type,
               });
               returnValue.poolTokenData = poolData.poolTokenData;
               returnValue.name = poolData.name;
