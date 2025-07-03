@@ -64,7 +64,7 @@ export interface TokenDefinition {
   L1BridgeAddress: string;
   L2BridgeAddress: string;
   lending: { type: string; address: string }[];
-  pools: string[];
+  pools: { type: string; address: string }[];
 }
 
 export type Network = "Ethereum" | "Swell" | "Sonic" | "Bitlayer";
