@@ -10,8 +10,16 @@ function getChain(id: number) {
 const DexDisplay = ({ token }: { token: TokenData }) => {
   const networkName = getChain(token.L2ChainID)?.name;
 
+  console.log("DexDisplay - token.pools:", token.pools);
+  console.log("DexDisplay - networkName:", networkName);
+
   if (!networkName) {
     console.log("No network found for chain ID: " + token.L2ChainID);
+    return null;
+  }
+
+  if (!token.pools || token.pools.length === 0) {
+    console.log("No pools found for token");
     return null;
   }
 
@@ -25,14 +33,21 @@ const DexDisplay = ({ token }: { token: TokenData }) => {
         DEX
       </Typography>
       <Box sx={{ mb: 2 }}>
-        {token.pools.map((pool) => {
+        {token.pools.map((pool, index) => {
+          console.log("Pool:", pool);
           if (pool.type === "Velodrome") {
             return (
-              <a href={`https://velodrome.finance/liquidity?filters=${networkName}&query=${pool.address}`}>
+              <a 
+                key={index}
+                href={`https://velodrome.finance/liquidity?filters=${networkName}&query=${pool.address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {`https://velodrome.finance/liquidity?filters=${networkName}&query=${pool.address}`}
               </a>
             );
           }
+          return null; // Important: return null for non-matching pools
         })}
       </Box>
     </>
