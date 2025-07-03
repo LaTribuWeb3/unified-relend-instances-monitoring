@@ -95,6 +95,14 @@ export const tokenService = {
         };
       });
 
+      const lending = tokenDefinition.lending.map((lending: { type: string; address: string }) => {
+        return {
+          address: lending.address,
+          type: lending.type,
+          name: `Lending ${lending.address.slice(0, 8)}...`,
+        };
+      })
+
       return {
         address: tokenDefinition.L1WrappedTokenAddress,
         L2TokenAddress: tokenDefinition.L2TokenAddress,
@@ -109,7 +117,7 @@ export const tokenService = {
         L2BridgeAddress: tokenDefinition.L2BridgeAddress,
         L2ChainID: tokenDefinition.L2ChainID,
         isOFT: tokenDefinition.L2TokenIsOFT,
-        lending: tokenDefinition.lending,
+        lending,
         pools,
       };
     });

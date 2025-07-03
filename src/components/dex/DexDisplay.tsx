@@ -25,14 +25,13 @@ const DexDisplay = ({ token }: { token: TokenData }) => {
 
   return (
     <>
-      <Typography
-        variant="subtitle2"
-        color="text.secondary"
-        sx={{ mt: 2, mb: 0.5, fontWeight: 700, letterSpacing: 1 }}
-      >
-        DEX
-      </Typography>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ 
+        display: "flex", 
+        flexDirection: "column", 
+        gap: 3, 
+        py: 2,
+        px: 1
+      }}>
         {token.pools.map((pool, index) => {
           console.log("Pool:", pool);
           if (pool.type === "Velodrome") {
@@ -42,8 +41,99 @@ const DexDisplay = ({ token }: { token: TokenData }) => {
                 href={`https://velodrome.finance/liquidity?filters=${networkName}&query=${pool.address}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  transition: "transform 0.2s ease, opacity 0.2s ease",
+                  cursor: "pointer",
+                  margin: 0,
+                  padding: "12px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: "#f8f9fa",
+                  border: "1px solid #e9ecef"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.02)";
+                  e.currentTarget.style.opacity = "0.9";
+                  e.currentTarget.style.backgroundColor = "#f1f3f4";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.opacity = "1";
+                  e.currentTarget.style.backgroundColor = "#f8f9fa";
+                }}
+                title="View on Velodrome Finance"
               >
-                {`https://velodrome.finance/liquidity?filters=${networkName}&query=${pool.address}`}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <img 
+                    src="/velodrome_logo_only.svg" 
+                    alt="Velodrome Finance" 
+                    style={{
+                      width: "28px",
+                      height: "28px",
+                      display: "block",
+                      margin: 0,
+                      padding: 0
+                    }}
+                  />
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    Velodrome
+                  </Typography>
+                </Box>
+              </a>
+            );
+          }
+          return null; // Important: return null for non-matching pools
+        })}
+        {token.lending.map((lending: { type: string; address: string }, index: number) => {
+          if (lending.type === "Euler") {
+            return (
+              <a 
+                key={index}
+                href={`https://app.euler.finance/vault/${lending.address}?network=${networkName}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  transition: "transform 0.2s ease, opacity 0.2s ease",
+                  cursor: "pointer",
+                  margin: 0,
+                  padding: "12px 16px",
+                  borderRadius: "8px",
+                  backgroundColor: "#f8f9fa",
+                  border: "1px solid #e9ecef"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.02)";
+                  e.currentTarget.style.opacity = "0.9";
+                  e.currentTarget.style.backgroundColor = "#f1f3f4";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.opacity = "1";
+                  e.currentTarget.style.backgroundColor = "#f8f9fa";
+                }}
+                title="View on Euler Finance"
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <img 
+                    src="/euler_logo_only.svg" 
+                    alt="Euler Finance" 
+                    style={{ 
+                      width: "28px", 
+                      height: "28px", 
+                      display: "block", 
+                      margin: 0, 
+                      padding: 0 
+                    }} 
+                  />
+                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    Euler
+                  </Typography>
+                </Box>
               </a>
             );
           }

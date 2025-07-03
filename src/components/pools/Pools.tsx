@@ -41,13 +41,25 @@ export const Pools = ({
         <Box sx={{ mt: 2 }}>
           {uniquePoolTypes.map((type) => (
             <Box key={type}>
-              <Typography
-                variant="h6"
-                gutterBottom
-                sx={{ fontWeight: 600, mb: 2 }}
-              >
-                {type}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                {type === "Velodrome" && (
+                  <img 
+                    src="/velodrome_logo_only.svg" 
+                    alt="Velodrome Finance" 
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      display: "block"
+                    }}
+                  />
+                )}
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600 }}
+                >
+                  {type}
+                </Typography>
+              </Box>
               {poolsData
                 .filter((pool) => pool.type === type)
                 .map((poolData: PoolData) => (

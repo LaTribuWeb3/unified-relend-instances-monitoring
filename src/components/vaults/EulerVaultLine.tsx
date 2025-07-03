@@ -33,13 +33,8 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({ index, vault, vaultsLoa
       },
     }}
   >
-    {/* Euler Logo and Number */}
+    {/* Vault Number */}
     <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 120 }}>
-      <img
-        src="https://docs.euler.finance/img/logo.svg"
-        alt="Euler Logo"
-        style={{ height: 24, width: 24, marginRight: 8, verticalAlign: 'middle' }}
-      />
       <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'text.secondary' }}>
         Vault #{index + 1}
       </Typography>
