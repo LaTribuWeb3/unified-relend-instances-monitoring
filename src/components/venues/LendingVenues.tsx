@@ -25,23 +25,26 @@ export const LendingVenues = ({
       {vaultsLoading && <div>Loading...</div>}
       {vaultsData.length > 0 && !vaultsLoading && (
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
-            Lending Markets
-          </Typography>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {uniqueVaultTypes.map((type) => (
-              <Box key={type}>
-                <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
+              <Box key={type} sx={{ mb: 2 }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ fontWeight: 600, mb: 2 }}
+                >
                   {type}
                 </Typography>
-                {vaultsData.filter((vault) => vault.type === type).map((vault: RawVaultData, index: number) => (
-                  <EulerVaultLine
-                    key={index}
-                index={index}
-                vault={vault}
-                vaultsLoading={vaultsLoading}
-                  />
-                ))}
+                {vaultsData
+                  .filter((vault) => vault.type === type)
+                  .map((vault: RawVaultData, index: number) => (
+                    <EulerVaultLine
+                      key={index}
+                      index={index}
+                      vault={vault}
+                      vaultsLoading={vaultsLoading}
+                    />
+                  ))}
               </Box>
             ))}
           </Box>
