@@ -5,9 +5,16 @@ import { RawVaultData } from "../vaults/EulerVaultDetails";
 export const LendingVenues = ({
   vaultsData,
   vaultsLoading,
+  apys,
 }: {
   vaultsData: RawVaultData[];
   vaultsLoading: boolean;
+  apys: {
+    total: {
+      supplyAPY: string;
+      borrowAPY: string;
+    };
+  };
 }) => {
   const vaultTypes = vaultsData.map((vault) => vault.type);
   const uniqueVaultTypes = [...new Set(vaultTypes)];
@@ -50,6 +57,7 @@ export const LendingVenues = ({
                       key={index}
                       index={index}
                       vault={vault}
+                      apys={apys}
                       vaultsLoading={vaultsLoading}
                     />
                   ))}

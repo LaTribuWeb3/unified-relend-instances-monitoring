@@ -29,6 +29,7 @@ import {
 } from "./vaults/EulerVaultDetails";
 import { LendingVenues } from "./venues/LendingVenues";
 import { Pools } from "./pools/Pools";
+import { calculateCombinedAPY } from "../utils/APYUtils";
 
 const L2DeploymentDetails: React.FC = () => {
   const { address } = useParams<{ address: string }>();
@@ -40,6 +41,12 @@ const L2DeploymentDetails: React.FC = () => {
   const [vaultsLoading, setVaultsLoading] = useState(false);
   const [poolsData, setPoolsData] = useState<PoolData[]>([]);
   const [poolsLoading, setPoolsLoading] = useState(false);
+  const [apys, setApys] = useState<any>(null);
+
+  const loadApys = async () => {
+    const apys = await calculateCombinedAPY();
+    setApys(apys);
+  };
 
   useEffect(() => {
     const loadTokenData = async () => {
@@ -66,6 +73,7 @@ const L2DeploymentDetails: React.FC = () => {
     };
 
     loadTokenData();
+    loadApys();
   }, [address]);
 
   useEffect(() => {
@@ -233,7 +241,7 @@ const L2DeploymentDetails: React.FC = () => {
             </Card>
           </Grid>
         </Grid>
-        <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} />
+        <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} apys={apys} />
         <Pools poolsData={poolsData} poolsLoading={poolsLoading} />
       </Container>
     </Box>

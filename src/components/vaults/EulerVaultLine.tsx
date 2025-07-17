@@ -13,9 +13,15 @@ interface EulerVaultLineProps {
     chainId: number;
   };
   vaultsLoading: boolean;
+  apys: {
+    total: {
+      supplyAPY: string;
+      borrowAPY: string;
+    };
+  };
 }
 
-const EulerVaultLine: React.FC<EulerVaultLineProps> = ({ index, vault, vaultsLoading }) => (
+const EulerVaultLine: React.FC<EulerVaultLineProps> = ({ index, vault, apys, vaultsLoading }) => (
   <Card
     sx={{
       width: '100%',
@@ -74,6 +80,14 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({ index, vault, vaultsLoa
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Cap</Typography>
         <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{vaultsLoading ? '...' : vault.borrowCap}</Typography>
       </Box>
+              <Box>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Supply APY</Typography>
+          <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{vaultsLoading ? '...' : `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`}</Typography>
+        </Box>
+        <Box>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Borrow APY</Typography>
+          <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{vaultsLoading ? '...' : `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`}</Typography>
+        </Box>
     </Box>
     {/* Arrow Link */}
     <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
