@@ -65,7 +65,9 @@ export const getVaultData = async ({
     totalBorrows: FriendlyFormatNumber(
       Number(borrow.toString()) / 10 ** decimals
     ),
-    borrowCap: FriendlyFormatNumber(Number(decodeCap(caps[1])) / 10 ** decimals),
+    borrowCap: FriendlyFormatNumber(
+      Number(decodeCap(caps[1])) / 10 ** decimals
+    ),
     decimals,
   };
 };
