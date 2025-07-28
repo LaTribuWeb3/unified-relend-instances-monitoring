@@ -6,6 +6,7 @@ export const LendingVenues = ({
   vaultsData,
   vaultsLoading,
   apys,
+  tokenSymbol,
 }: {
   vaultsData: RawVaultData[];
   vaultsLoading: boolean;
@@ -15,6 +16,7 @@ export const LendingVenues = ({
       borrowAPY: string;
     };
   };
+  tokenSymbol: string;
 }) => {
   const vaultTypes = vaultsData.map((vault) => vault.type);
   const uniqueVaultTypes = [...new Set(vaultTypes)];
@@ -67,6 +69,7 @@ export const LendingVenues = ({
                       vault={vault}
                       apys={apys}
                       vaultsLoading={vaultsLoading}
+                      tokenSymbol={tokenSymbol}
                     />
                   ))}
               </Box>

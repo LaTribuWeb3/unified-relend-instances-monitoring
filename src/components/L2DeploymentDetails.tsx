@@ -88,6 +88,7 @@ const L2DeploymentDetails: React.FC = () => {
               address: lending.address,
               type: lending.type,
               totalSupply: "Error",
+              totalSupplyDebtToken: "Error",
               totalBorrows: "Error",
               borrowCap: "Error",
               chainId: token.L2ChainID,
@@ -98,6 +99,7 @@ const L2DeploymentDetails: React.FC = () => {
                 vaultAddress: lending.address,
               });
               returnValue.totalSupply = vaultData.totalSupply;
+              returnValue.totalSupplyDebtToken = vaultData.totalSupplyDebtToken;
               returnValue.totalBorrows = vaultData.totalBorrows;
               returnValue.borrowCap = vaultData.borrowCap;
             } catch (error) {
@@ -255,7 +257,7 @@ const L2DeploymentDetails: React.FC = () => {
             </Card>
           </Grid>
         </Grid>
-        <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} apys={apys} />
+        <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} apys={apys} tokenSymbol={token.symbol} />
         <Pools poolsData={poolsData} poolsLoading={poolsLoading} chainId={token.L2ChainID} />
       </Container>
     </Box>

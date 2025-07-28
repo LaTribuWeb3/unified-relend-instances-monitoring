@@ -18,6 +18,7 @@ export type RawVaultData = {
 
 export interface VaultData {
   totalSupply: string;
+  totalSupplyDebtToken: string;
   totalBorrows: string;
   borrowCap: string;
   decimals: number;
@@ -38,9 +39,31 @@ export const getVaultData = async ({
     abi: swellEulerVaultAbi,
   };
 
-  const totalSupply = (await client.readContract({
+  const dTokenAddress = (await client.readContract({
     ...swellEulerVaultContract,
+    functionName: "dToken",
+  })) as `0x${string}`;
+
+  const dTokenContract = {
+    address: dTokenAddress as `0x${string}`,
+    abi: USDeOFTAbi,
+  };
+
+  const totalSupplyDebtToken = (await client.readContract({
+    ...dTokenContract,
     functionName: "totalSupply",
+  })) as bigint;
+
+  const underlyingToken = (await client.readContract({
+    ...swellEulerVaultContract,
+    functionName: "asset",
+  })) as `0x${string}`;
+
+  const balanceOfUnderlyingToken = (await client.readContract({
+    address: underlyingToken as `0x${string}`,
+    abi: USDeOFTAbi,
+    functionName: "balanceOf",
+    args: [swellEulerVaultContract.address],
   })) as bigint;
 
   const borrow = (await client.readContract({
@@ -58,9 +81,14 @@ export const getVaultData = async ({
     functionName: "decimals",
   })) as number;
 
+  const computedTotalSupply = balanceOfUnderlyingToken + borrow;
+
   return {
     totalSupply: FriendlyFormatNumber(
-      Number(totalSupply.toString()) / 10 ** decimals
+      Number(computedTotalSupply.toString()) / 10 ** decimals
+    ),
+    totalSupplyDebtToken: FriendlyFormatNumber(
+      Number(totalSupplyDebtToken.toString()) / 10 ** decimals
     ),
     totalBorrows: FriendlyFormatNumber(
       Number(borrow.toString()) / 10 ** decimals

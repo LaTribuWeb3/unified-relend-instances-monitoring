@@ -8,6 +8,7 @@ interface EulerVaultLineProps {
   vault: {
     address: string;
     totalSupply: string;
+    totalSupplyDebtToken: string;
     totalBorrows: string;
     borrowCap: string;
     chainId: number;
@@ -19,6 +20,7 @@ interface EulerVaultLineProps {
       borrowAPY: string;
     };
   };
+  tokenSymbol: string;
 }
 
 const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
@@ -26,6 +28,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
   vault,
   apys,
   vaultsLoading,
+  tokenSymbol,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -104,7 +107,22 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                 variant="body2"
                 sx={{ fontFamily: "monospace", fontWeight: 600, fontSize: "0.875rem" }}
               >
-                {vaultsLoading ? "..." : vault.totalSupply}
+                {vaultsLoading ? "..." : `${vault.totalSupply} ${tokenSymbol}`}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block" }}
+              >
+                Supply Debt Token
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontFamily: "monospace", fontWeight: 600, fontSize: "0.875rem" }}
+              >
+                {vaultsLoading ? "..." : `${vault.totalSupplyDebtToken} ${tokenSymbol}`}
               </Typography>
             </Box>
             <Box>
@@ -119,7 +137,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                 variant="body2"
                 sx={{ fontFamily: "monospace", fontWeight: 600, fontSize: "0.875rem" }}
               >
-                {vaultsLoading ? "..." : vault.totalBorrows}
+                {vaultsLoading ? "..." : `${vault.totalBorrows} ${tokenSymbol}`}
               </Typography>
             </Box>
             <Box>
@@ -172,7 +190,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                 variant="body2"
                 sx={{ fontFamily: "monospace", fontWeight: 600, fontSize: "0.875rem" }}
               >
-                {vaultsLoading ? "..." : vault.borrowCap}
+                {vaultsLoading ? "..." : `${vault.borrowCap} ${tokenSymbol}`}
               </Typography>
             </Box>
           </Box>
@@ -222,7 +240,22 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                 variant="body2"
                 sx={{ fontFamily: "monospace", fontWeight: 600 }}
               >
-                {vaultsLoading ? "..." : vault.totalSupply}
+                {vaultsLoading ? "..." : `${vault.totalSupply} ${tokenSymbol}`}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block" }}
+              >
+                Supply Debt Token
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ fontFamily: "monospace", fontWeight: 600 }}
+              >
+                {vaultsLoading ? "..." : `${vault.totalSupplyDebtToken} ${tokenSymbol}`}
               </Typography>
             </Box>
             <Box>
@@ -237,7 +270,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                 variant="body2"
                 sx={{ fontFamily: "monospace", fontWeight: 600 }}
               >
-                {vaultsLoading ? "..." : vault.totalBorrows}
+                {vaultsLoading ? "..." : `${vault.totalBorrows} ${tokenSymbol}`}
               </Typography>
             </Box>
             <Box>
@@ -252,7 +285,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                 variant="body2"
                 sx={{ fontFamily: "monospace", fontWeight: 600 }}
               >
-                {vaultsLoading ? "..." : vault.borrowCap}
+                {vaultsLoading ? "..." : `${vault.borrowCap} ${tokenSymbol}`}
               </Typography>
             </Box>
             <Box>
