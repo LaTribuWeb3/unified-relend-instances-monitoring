@@ -5,7 +5,6 @@ import {
   CircularProgress,
   Container,
   IconButton,
-  Link,
   Paper,
   Table,
   TableBody,
@@ -15,6 +14,8 @@ import {
   TableRow,
   Toolbar,
   Typography,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -25,7 +26,7 @@ import { mainnet } from 'viem/chains';
 import L2DeploymentDetails from './components/L2DeploymentDetails';
 import { tokenService } from './services/tokenService';
 import { TokenData } from './types';
-import { computeExplorerFromChainId } from './utils/ChainUtils';
+import AddressLink from './components/AddressLink';
 
 const theme = createTheme({
   palette: {
@@ -54,6 +55,8 @@ function TokenList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const loadTokenData = async () => {
     setLoading(true);
@@ -95,7 +98,10 @@ function TokenList() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth={false} sx={{ maxWidth: '1200px !important' }}>
+      <Container maxWidth={false} sx={{ 
+        maxWidth: '1200px !important',
+        px: { xs: 1, sm: 2, md: 3 }
+      }}>
         {loading ? (
           <Box display="flex" justifyContent="center" mt={4}>
             <CircularProgress />
@@ -105,45 +111,124 @@ function TokenList() {
             {error}
           </Typography>
         ) : (
-          <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: 2, overflowX: 'auto' }}>
-            <Table sx={{ minWidth: 1100 }}>
+          <TableContainer 
+            component={Paper} 
+            sx={{ 
+              borderRadius: 3, 
+              boxShadow: 2, 
+              overflowX: 'auto',
+              '& .MuiTable-root': {
+                minWidth: { xs: 'auto', md: 800 },
+              }
+            }}
+          >
+            <Table sx={{ width: '100%' }}>
               <TableHead>
                 <TableRow sx={{ background: '#f0f4f8' }}>
-                  <TableCell sx={{ fontWeight: 700 }}>Network</TableCell>
-                  <TableCell sx={{ fontWeight: 700 }}>Token Name</TableCell>
-                  <TableCell sx={{ fontWeight: 700 }}>L1 Wrapped Token Address</TableCell>
-                  <TableCell sx={{ fontWeight: 700, textAlign: 'right' }}>Total Supply</TableCell>
-                  <TableCell sx={{ fontWeight: 700, textAlign: 'right' }}>Total Supply USDC</TableCell>
-                  <TableCell sx={{ fontWeight: 700, textAlign: 'center' }}>Ratio</TableCell>
-                  <TableCell sx={{ fontWeight: 700, textAlign: 'center' }}>Details</TableCell>
+                  <TableCell sx={{ fontWeight: 700, minWidth: { xs: 80, md: 120 } }}>
+                    Network
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, minWidth: { xs: 140, md: 200 } }}>
+                    Token Name
+                  </TableCell>
+                  {!isMobile && (
+                    <TableCell sx={{ fontWeight: 700, minWidth: 300 }}>
+                      L1 Wrapped Token Address
+                    </TableCell>
+                  )}
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'right', minWidth: { xs: 80, md: 120 } }}>
+                    {isMobile ? 'Supply' : 'Total Supply'}
+                  </TableCell>
+                  {!isMobile && (
+                    <TableCell sx={{ fontWeight: 700, textAlign: 'right', minWidth: 120 }}>
+                      Total Supply USDC
+                    </TableCell>
+                  )}
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'center', minWidth: { xs: 60, md: 80 } }}>
+                    Ratio
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'center', minWidth: 60 }}>
+                    Details
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {tokens.map((token) => (
-                  <TableRow key={token.address} sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: 64 }}>
-                    <TableCell sx={{ fontWeight: 600 }}>{token.network}</TableCell>
-                    <TableCell>
-                      <Typography variant="subtitle1" fontWeight={500} fontSize={16}>
-                        {token.name} ({token.symbol})
-                      </Typography>
+                  <TableRow key={token.address} sx={{ '&:last-child td, &:last-child th': { border: 0 }, height: { xs: 'auto', md: 64 } }}>
+                    <TableCell sx={{ fontWeight: 600, fontSize: { xs: '0.875rem', md: '1rem' } }}>
+                      {token.network}
                     </TableCell>
                     <TableCell>
-                      <Link
-                        href={`${computeExplorerFromChainId(mainnet.id)}${token.address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{ textDecoration: 'none', fontFamily: 'monospace', fontSize: 15 }}
+                      <Typography 
+                        variant="subtitle1" 
+                        fontWeight={500} 
+                        fontSize={{ xs: 14, md: 16 }}
+                        sx={{ 
+                          wordBreak: 'break-word',
+                          lineHeight: 1.2
+                        }}
                       >
-                        {token.address}
-                      </Link>
+                        {token.name}
+                      </Typography>
+                      <Typography 
+                        variant="caption" 
+                        color="text.secondary"
+                        sx={{ display: 'block', fontSize: { xs: '0.75rem', md: '0.875rem' } }}
+                      >
+                        ({token.symbol})
+                      </Typography>
+                      {isMobile && (
+                        <Box sx={{ mt: 0.5 }}>
+                          <AddressLink 
+                            address={token.address} 
+                            chainId={mainnet.id}
+                            truncate={true}
+                            fontSize={12}
+                          />
+                        </Box>
+                      )}
                     </TableCell>
-                    <TableCell align="right" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
+                    {!isMobile && (
+                      <TableCell>
+                        <AddressLink 
+                          address={token.address} 
+                          chainId={mainnet.id}
+                          fontSize={15}
+                        />
+                      </TableCell>
+                    )}
+                    <TableCell 
+                      align="right" 
+                      sx={{ 
+                        fontFamily: 'monospace', 
+                        fontWeight: 500,
+                        fontSize: { xs: '0.875rem', md: '1rem' }
+                      }}
+                    >
                       {formatNumber(Number(token.totalSupply), 0)}
+                      {isMobile && (
+                        <Typography 
+                          variant="caption" 
+                          color="text.secondary"
+                          sx={{ display: 'block', fontSize: '0.75rem' }}
+                        >
+                          USDC: {formatNumber(Number(token.totalSupplyUSDC), 0)}
+                        </Typography>
+                      )}
                     </TableCell>
-                    <TableCell align="right" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
-                      {formatNumber(Number(token.totalSupplyUSDC), 0)}
-                    </TableCell>
-                    <TableCell align="center" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
+                    {!isMobile && (
+                      <TableCell align="right" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
+                        {formatNumber(Number(token.totalSupplyUSDC), 0)}
+                      </TableCell>
+                    )}
+                    <TableCell 
+                      align="center" 
+                      sx={{ 
+                        fontFamily: 'monospace', 
+                        fontWeight: 500,
+                        fontSize: { xs: '0.875rem', md: '1rem' }
+                      }}
+                    >
                       {formatNumber((Number(token.totalSupplyUSDC) / Number(token.totalSupply)) * 100, 2)}%
                     </TableCell>
                     <TableCell align="center">
@@ -155,10 +240,11 @@ function TokenList() {
                             backgroundColor: 'rgba(25, 118, 210, 0.1)',
                             transform: 'scale(1.1)'
                           },
-                          transition: 'all 0.2s ease-in-out'
+                          transition: 'all 0.2s ease-in-out',
+                          p: { xs: 0.5, md: 1 }
                         }}
                       >
-                        <ArrowForwardIcon />
+                        <ArrowForwardIcon sx={{ fontSize: { xs: 18, md: 24 } }} />
                       </IconButton>
                     </TableCell>
                   </TableRow>

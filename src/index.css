@@ -15,4 +15,52 @@ code {
 
 * {
   box-sizing: border-box;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better text readability on mobile */
+  .MuiTypography-root {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Ensure tables scroll horizontally when needed */
+  .MuiTableContainer-root {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Improve card spacing on mobile */
+  .MuiCard-root {
+    margin-bottom: 12px !important;
+  }
+  
+  /* Better form field sizing */
+  .MuiTextField-root {
+    width: 100%;
+  }
+}
+
+/* Additional responsive text utilities */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-break-all {
+  word-break: break-all;
+  overflow-wrap: break-word;
 } 

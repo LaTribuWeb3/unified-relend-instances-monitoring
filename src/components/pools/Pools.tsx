@@ -1,12 +1,15 @@
 import { PoolData, PoolTokenData } from "@/types";
 import { Box, Paper, Typography } from "@mui/material";
+import AddressLink from "../AddressLink";
 
 export const Pools = ({
   poolsData,
   poolsLoading,
+  chainId,
 }: {
   poolsData: PoolData[];
   poolsLoading: boolean;
+  chainId: number;
 }) => {
   console.log("Pools Data:", poolsData);
   console.log("Pools Loading:", poolsLoading);
@@ -15,12 +18,20 @@ export const Pools = ({
   const uniquePoolTypes = [...new Set(poolTypes)];
 
   return (
-    <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2, mb: 3 }}>
+    <Paper sx={{ 
+      p: { xs: 2, sm: 3, md: 4 }, 
+      borderRadius: 3, 
+      boxShadow: 2, 
+      mb: { xs: 2, md: 3 }
+    }}>
       <Typography
         variant="h4"
         component="h1"
         gutterBottom
-        sx={{ fontWeight: 700 }}
+        sx={{ 
+          fontWeight: 700,
+          fontSize: { xs: '1.5rem', md: '2.125rem' }
+        }}
       >
         Pools
       </Typography>
@@ -66,21 +77,36 @@ export const Pools = ({
                   <Box
                     key={poolData.address}
                     sx={{
-                      mb: 3,
-                      p: 2,
+                      mb: { xs: 2, md: 3 },
+                      p: { xs: 1.5, md: 2 },
                       border: "1px solid #e0e0e0",
                       borderRadius: 2,
                     }}
                   >
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        fontWeight: 600, 
+                        mb: 1,
+                        fontSize: { xs: '1rem', md: '1.25rem' }
+                      }}
+                    >
                       {poolData.name}
                     </Typography>
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      sx={{ mb: 1 }}
+                      sx={{ 
+                        mb: 1,
+                        fontSize: { xs: '0.875rem', md: '0.875rem' }
+                      }}
                     >
-                      Address: {poolData.address}
+                      Address:{" "}
+                      <AddressLink 
+                        address={poolData.address} 
+                        chainId={chainId}
+                        fontSize={14}
+                      />
                     </Typography>
 
                     {poolData.poolTokenData.length > 0 ? (

@@ -20,12 +20,20 @@ export const LendingVenues = ({
   const uniqueVaultTypes = [...new Set(vaultTypes)];
 
   return (
-    <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2, mb: 3 }}>
+    <Paper sx={{ 
+      p: { xs: 2, sm: 3, md: 4 }, 
+      borderRadius: 3, 
+      boxShadow: 2, 
+      mb: { xs: 2, md: 3 }
+    }}>
       <Typography
         variant="h4"
         component="h1"
         gutterBottom
-        sx={{ fontWeight: 700 }}
+        sx={{ 
+          fontWeight: 700,
+          fontSize: { xs: '1.5rem', md: '2.125rem' }
+        }}
       >
         Lending Venues
       </Typography>

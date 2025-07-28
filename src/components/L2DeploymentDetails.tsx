@@ -211,13 +211,27 @@ const L2DeploymentDetails: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2 }}>
+      <Container 
+        maxWidth="lg" 
+        sx={{ 
+          mt: { xs: 2, md: 4 }, 
+          mb: { xs: 2, md: 4 },
+          px: { xs: 1, sm: 2, md: 3 }
+        }}
+      >
+        <Paper sx={{ 
+          p: { xs: 2, sm: 3, md: 4 }, 
+          borderRadius: 3, 
+          boxShadow: 2 
+        }}>
           <Typography
             variant="h4"
             component="h1"
             gutterBottom
-            sx={{ fontWeight: 700 }}
+            sx={{ 
+              fontWeight: 700,
+              fontSize: { xs: '1.75rem', md: '2.125rem' }
+            }}
           >
             {token.name}
           </Typography>
@@ -225,24 +239,24 @@ const L2DeploymentDetails: React.FC = () => {
           <TokenInformation token={token} />
         </Paper>
 
-        <Grid container spacing={3} sx={{ mt: 3, mb: 3 }}>
-          <Grid item xs={12} md={6} sx={{ mb: { xs: 2, md: 0 } }}>
-            <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
-              <CardContent>
+        <Grid container spacing={{ xs: 2, md: 3 }} sx={{ mt: { xs: 2, md: 3 }, mb: { xs: 2, md: 3 } }}>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 1, md: 0 } }}>
+            <Card sx={{ borderRadius: 3, boxShadow: 2, height: '100%' }}>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                 <BridgeDisplay token={token} />
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={6} sx={{ mb: { xs: 2, md: 0 } }}>
-            <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
-              <CardContent>
+          <Grid item xs={12} md={6} sx={{ mb: { xs: 1, md: 0 } }}>
+            <Card sx={{ borderRadius: 3, boxShadow: 2, height: '100%' }}>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
                 <PartnersDisplay token={token} />
               </CardContent>
             </Card>
           </Grid>
         </Grid>
         <LendingVenues vaultsData={vaultsData} vaultsLoading={vaultsLoading} apys={apys} />
-        <Pools poolsData={poolsData} poolsLoading={poolsLoading} />
+        <Pools poolsData={poolsData} poolsLoading={poolsLoading} chainId={token.L2ChainID} />
       </Container>
     </Box>
   );
