@@ -136,7 +136,9 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               >
                 {vaultsLoading
                   ? "..."
-                  : `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`}
+                  : apys?.total?.supplyAPY 
+                    ? `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`
+                    : "N/A"}
               </Typography>
             </Box>
             <Box>
@@ -153,7 +155,9 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               >
                 {vaultsLoading
                   ? "..."
-                  : `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`}
+                  : apys?.total?.borrowAPY 
+                    ? `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`
+                    : "N/A"}
               </Typography>
             </Box>
             <Box>
@@ -265,7 +269,9 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               >
                 {vaultsLoading
                   ? "..."
-                  : `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`}
+                  : apys?.total?.supplyAPY 
+                    ? `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`
+                    : "N/A"}
               </Typography>
             </Box>
             <Box>
@@ -282,7 +288,9 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               >
                 {vaultsLoading
                   ? "..."
-                  : `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`}
+                  : apys?.total?.borrowAPY 
+                    ? `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`
+                    : "N/A"}
               </Typography>
             </Box>
           </Box>
