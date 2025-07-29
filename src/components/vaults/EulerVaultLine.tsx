@@ -33,9 +33,20 @@ interface EulerVaultLineProps {
   };
   vaultsLoading: boolean;
   apys: {
+    euler: {
+      borrowAPY: number;
+      supplyAPY: number;
+      source: string;
+    };
+    merkl: {
+      borrowAPY: number;
+      supplyAPY: number;
+      source: string;
+    };
     total: {
-      supplyAPY: string;
-      borrowAPY: string;
+      borrowAPY: number;
+      supplyAPY: number;
+      source: string;
     };
   };
   tokenSymbol: string;
@@ -124,8 +135,19 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const formatAPY = (apy: string) => {
-    return apy ? `${parseFloat(apy).toFixed(2)}%` : "N/A";
+  const formatAPYWithBreakdown = (
+    totalAPY: number,
+    eulerAPY: number,
+    merklAPY: number,
+    type: 'supply' | 'borrow'
+  ) => {
+    if (!totalAPY && totalAPY !== 0) return "N/A";
+    
+    const total = totalAPY.toFixed(2);
+    const euler = eulerAPY.toFixed(2);
+    const merkl = merklAPY.toFixed(2);
+    
+    return `${total}% (Euler: ${euler}% ${type === 'supply' ? '+' : '-'} Merkl: ${merkl}%)`;
   };
 
   return (
@@ -281,13 +303,23 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
 
             <MetricRow
               label="Supply APY"
-              value={formatAPY(apys?.total?.supplyAPY)}
+              value={formatAPYWithBreakdown(
+                apys?.total?.supplyAPY,
+                apys?.euler?.supplyAPY,
+                apys?.merkl?.supplyAPY,
+                'supply'
+              )}
               loading={vaultsLoading}
             />
 
             <MetricRow
               label="Borrow APY"
-              value={formatAPY(apys?.total?.borrowAPY)}
+              value={formatAPYWithBreakdown(
+                apys?.total?.borrowAPY,
+                apys?.euler?.borrowAPY,
+                apys?.merkl?.borrowAPY,
+                'borrow'
+              )}
               loading={vaultsLoading}
             />
           </TableBody>
