@@ -87,10 +87,12 @@ const L2DeploymentDetails: React.FC = () => {
             let returnValue = {
               address: lending.address,
               type: lending.type,
-              totalSupply: "Error",
-              totalSupplyDebtToken: "Error",
-              totalBorrows: "Error",
-              borrowCap: "Error",
+              balanceOfUnderlyingToken: 0,
+              debtTokenAddress: "",
+              totalSupply: 0,
+              totalSupplyDebtToken: 0,
+              totalBorrows: 0,
+              borrowCap: 0,
               chainId: token.L2ChainID,
             };
 
@@ -98,6 +100,8 @@ const L2DeploymentDetails: React.FC = () => {
               const vaultData: VaultData = await getVaultData({
                 vaultAddress: lending.address,
               });
+              returnValue.balanceOfUnderlyingToken = vaultData.balanceOfUnderlyingToken;
+              returnValue.debtTokenAddress = vaultData.debtTokenAddress;
               returnValue.totalSupply = vaultData.totalSupply;
               returnValue.totalSupplyDebtToken = vaultData.totalSupplyDebtToken;
               returnValue.totalBorrows = vaultData.totalBorrows;

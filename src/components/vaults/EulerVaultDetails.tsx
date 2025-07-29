@@ -10,17 +10,22 @@ import { decodeCap } from "@/utils/CapUtils.ts";
 export type RawVaultData = {
   address: string;
   type: string;
-  totalSupply: string;
-  totalBorrows: string;
-  borrowCap: string;
+  totalSupply: number;
+  balanceOfUnderlyingToken: number;
+  debtTokenAddress: string;
+  totalBorrows: number;
+  totalSupplyDebtToken: number;
+  borrowCap: number;
   chainId: number;
 };
 
 export interface VaultData {
-  totalSupply: string;
-  totalSupplyDebtToken: string;
-  totalBorrows: string;
-  borrowCap: string;
+  balanceOfUnderlyingToken: number;
+  debtTokenAddress: string;
+  totalSupply: number;
+  totalSupplyDebtToken: number;
+  totalBorrows: number;
+  borrowCap: number;
   decimals: number;
 }
 
@@ -84,18 +89,12 @@ export const getVaultData = async ({
   const computedTotalSupply = balanceOfUnderlyingToken + borrow;
 
   return {
-    totalSupply: FriendlyFormatNumber(
-      Number(computedTotalSupply.toString()) / 10 ** decimals
-    ),
-    totalSupplyDebtToken: FriendlyFormatNumber(
-      Number(totalSupplyDebtToken.toString()) / 10 ** decimals
-    ),
-    totalBorrows: FriendlyFormatNumber(
-      Number(borrow.toString()) / 10 ** decimals
-    ),
-    borrowCap: FriendlyFormatNumber(
-      Number(decodeCap(caps[1])) / 10 ** decimals
-    ),
+    balanceOfUnderlyingToken: Number(balanceOfUnderlyingToken.toString()) / 10 ** decimals,
+    debtTokenAddress: dTokenAddress,
+    totalSupply: Number(computedTotalSupply.toString()) / 10 ** decimals,
+    totalSupplyDebtToken: Number(totalSupplyDebtToken.toString()) / 10 ** decimals,
+    totalBorrows: Number(borrow.toString()) / 10 ** decimals,
+    borrowCap: Number(decodeCap(caps[1])) / 10 ** decimals,
     decimals,
   };
 };
