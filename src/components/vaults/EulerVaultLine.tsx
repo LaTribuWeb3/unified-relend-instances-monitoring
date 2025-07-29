@@ -391,7 +391,58 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                     ...
                   </Typography>
                 ) : (
-                  <APYBreakdownTable type="supply" apys={apys} />
+                  <Tooltip
+                    title={
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                          Supply APY Detailed Breakdown:
+                        </Typography>
+                        <Typography variant="body2">
+                          • Euler Lens: {apys?.euler?.supplyAPY?.toFixed(4)}% (Base lending rate)
+                        </Typography>
+                        <Typography variant="body2">
+                          • Merkl Rewards: {apys?.merkl?.supplyAPY?.toFixed(4)}% (Token incentives)
+                        </Typography>
+                        
+                        {/* Merkl APR Record Details for Supply */}
+                        {apys?.merkl?.aprRecord?.lend && (
+                          <Box sx={{ mt: 1, pl: 2, borderLeft: 1, borderColor: "divider" }}>
+                            <Typography variant="caption" sx={{ fontWeight: 600, display: "block" }}>
+                              Merkl Campaign Details:
+                            </Typography>
+                            {apys.merkl.aprRecord.lend.breakdowns.map((breakdown: any, index: number) => (
+                              <Box key={index} sx={{ mt: 0.5 }}>
+                                <Typography variant="caption" sx={{ display: "block" }}>
+                                  • Type: {breakdown.type} ({breakdown.distributionType})
+                                </Typography>
+                                <Typography variant="caption" sx={{ display: "block" }}>
+                                  • Value: {breakdown.value.toFixed(4)}%
+                                </Typography>
+                                <Typography variant="caption" sx={{ display: "block", opacity: 0.8 }}>
+                                  • Campaign ID: {breakdown.identifier.slice(0, 10)}...
+                                </Typography>
+                              </Box>
+                            ))}
+                            <Typography variant="caption" sx={{ mt: 0.5, display: "block", opacity: 0.8 }}>
+                              Last updated: {new Date(parseInt(apys.merkl.aprRecord.lend.timestamp) * 1000).toLocaleString()}
+                            </Typography>
+                          </Box>
+                        )}
+                        
+                        <Typography variant="body2" sx={{ mt: 1, fontWeight: 600 }}>
+                          Total: {apys?.total?.supplyAPY?.toFixed(4)}%
+                        </Typography>
+                        <Typography variant="caption" sx={{ mt: 1, display: "block", opacity: 0.8 }}>
+                          Sources: {apys?.euler?.source} + {apys?.merkl?.source}
+                        </Typography>
+                      </Box>
+                    }
+                    arrow
+                  >
+                    <Box sx={{ cursor: "help" }}>
+                      <APYBreakdownTable type="supply" apys={apys} />
+                    </Box>
+                  </Tooltip>
                 )}
               </TableCell>
             </TableRow>
@@ -422,7 +473,58 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                     ...
                   </Typography>
                 ) : (
-                  <APYBreakdownTable type="borrow" apys={apys} />
+                  <Tooltip
+                    title={
+                      <Box>
+                        <Typography variant="body2" sx={{ fontWeight: 600, mb: 1 }}>
+                          Borrow APY Detailed Breakdown:
+                        </Typography>
+                        <Typography variant="body2">
+                          • Euler Lens: {apys?.euler?.borrowAPY?.toFixed(4)}% (Base borrowing rate)
+                        </Typography>
+                        <Typography variant="body2">
+                          • Merkl Rewards: -{apys?.merkl?.borrowAPY?.toFixed(4)}% (Borrow incentives)
+                        </Typography>
+                        
+                        {/* Merkl APR Record Details for Borrow */}
+                        {apys?.merkl?.aprRecord?.borrow && (
+                          <Box sx={{ mt: 1, pl: 2, borderLeft: 1, borderColor: "divider" }}>
+                            <Typography variant="caption" sx={{ fontWeight: 600, display: "block" }}>
+                              Merkl Campaign Details:
+                            </Typography>
+                            {apys.merkl.aprRecord.borrow.breakdowns.map((breakdown: any, index: number) => (
+                              <Box key={index} sx={{ mt: 0.5 }}>
+                                <Typography variant="caption" sx={{ display: "block" }}>
+                                  • Type: {breakdown.type} ({breakdown.distributionType})
+                                </Typography>
+                                <Typography variant="caption" sx={{ display: "block" }}>
+                                  • Value: {breakdown.value.toFixed(4)}%
+                                </Typography>
+                                <Typography variant="caption" sx={{ display: "block", opacity: 0.8 }}>
+                                  • Campaign ID: {breakdown.identifier.slice(0, 10)}...
+                                </Typography>
+                              </Box>
+                            ))}
+                            <Typography variant="caption" sx={{ mt: 0.5, display: "block", opacity: 0.8 }}>
+                              Last updated: {new Date(parseInt(apys.merkl.aprRecord.borrow.timestamp) * 1000).toLocaleString()}
+                            </Typography>
+                          </Box>
+                        )}
+                        
+                        <Typography variant="body2" sx={{ mt: 1, fontWeight: 600 }}>
+                          Net Cost: {apys?.total?.borrowAPY?.toFixed(4)}%
+                        </Typography>
+                        <Typography variant="caption" sx={{ mt: 1, display: "block", opacity: 0.8 }}>
+                          Sources: {apys?.euler?.source} + {apys?.merkl?.source}
+                        </Typography>
+                      </Box>
+                    }
+                    arrow
+                  >
+                    <Box sx={{ cursor: "help" }}>
+                      <APYBreakdownTable type="borrow" apys={apys} />
+                    </Box>
+                  </Tooltip>
                 )}
               </TableCell>
             </TableRow>
