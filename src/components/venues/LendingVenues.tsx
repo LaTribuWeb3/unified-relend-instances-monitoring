@@ -11,9 +11,44 @@ export const LendingVenues = ({
   vaultsData: RawVaultData[];
   vaultsLoading: boolean;
   apys: {
+    euler: {
+      borrowAPY: number;
+      supplyAPY: number;
+      source: string;
+    };
+    merkl: {
+      borrowAPY: number;
+      supplyAPY: number;
+      source: string;
+      aprRecord?: {
+        lend?: {
+          breakdowns: Array<{
+            distributionType: string;
+            identifier: string;
+            type: string;
+            value: number;
+            timestamp: string;
+          }>;
+          cumulated: number;
+          timestamp: string;
+        };
+        borrow?: {
+          breakdowns: Array<{
+            distributionType: string;
+            identifier: string;
+            type: string;
+            value: number;
+            timestamp: string;
+          }>;
+          cumulated: number;
+          timestamp: string;
+        };
+      };
+    };
     total: {
-      supplyAPY: string;
-      borrowAPY: string;
+      borrowAPY: number;
+      supplyAPY: number;
+      source: string;
     };
   };
   tokenSymbol: string;
@@ -22,19 +57,21 @@ export const LendingVenues = ({
   const uniqueVaultTypes = [...new Set(vaultTypes)];
 
   return (
-    <Paper sx={{ 
-      p: { xs: 2, sm: 3, md: 4 }, 
-      borderRadius: 3, 
-      boxShadow: 2, 
-      mb: { xs: 2, md: 3 }
-    }}>
+    <Paper
+      sx={{
+        p: { xs: 2, sm: 3, md: 4 },
+        borderRadius: 3,
+        boxShadow: 2,
+        mb: { xs: 2, md: 3 },
+      }}
+    >
       <Typography
         variant="h4"
         component="h1"
         gutterBottom
-        sx={{ 
+        sx={{
           fontWeight: 700,
-          fontSize: { xs: '1.5rem', md: '2.125rem' }
+          fontSize: { xs: "1.5rem", md: "2.125rem" },
         }}
       >
         Lending Venues
@@ -45,7 +82,9 @@ export const LendingVenues = ({
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {uniqueVaultTypes.map((type) => (
               <Box key={type} sx={{ mb: 2 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}
+                >
                   {type === "Euler" && (
                     <img
                       src="/euler_logo_only.svg"
@@ -53,10 +92,7 @@ export const LendingVenues = ({
                       style={{ height: 28, width: 28 }}
                     />
                   )}
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: 600 }}
-                  >
+                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
                     {type}
                   </Typography>
                 </Box>
