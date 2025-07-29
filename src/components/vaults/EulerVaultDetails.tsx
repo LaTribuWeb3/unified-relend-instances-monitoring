@@ -10,6 +10,7 @@ import { decodeCap } from "@/utils/CapUtils.ts";
 export type RawVaultData = {
   address: string;
   type: string;
+  name: string;
   totalSupply: number;
   balanceOfUnderlyingToken: number;
   debtTokenAddress: string;
@@ -19,15 +20,16 @@ export type RawVaultData = {
   chainId: number;
 };
 
-export interface VaultData {
+export type VaultData = {
+  name: string;
+  totalSupply: number;
   balanceOfUnderlyingToken: number;
   debtTokenAddress: string;
-  totalSupply: number;
-  totalSupplyDebtToken: number;
   totalBorrows: number;
+  totalSupplyDebtToken: number;
   borrowCap: number;
   decimals: number;
-}
+};
 
 export const getVaultData = async ({
   vaultAddress,
@@ -86,9 +88,15 @@ export const getVaultData = async ({
     functionName: "decimals",
   })) as number;
 
+  const name = (await client.readContract({
+    ...swellEulerVaultContract,
+    functionName: "name",
+  })) as string;
+
   const computedTotalSupply = balanceOfUnderlyingToken + borrow;
 
   return {
+    name,
     balanceOfUnderlyingToken: Number(balanceOfUnderlyingToken.toString()) / 10 ** decimals,
     debtTokenAddress: dTokenAddress,
     totalSupply: Number(computedTotalSupply.toString()) / 10 ** decimals,

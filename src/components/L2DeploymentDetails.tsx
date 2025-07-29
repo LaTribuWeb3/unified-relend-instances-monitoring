@@ -87,6 +87,7 @@ const L2DeploymentDetails: React.FC = () => {
             let returnValue = {
               address: lending.address,
               type: lending.type,
+              name: "",
               balanceOfUnderlyingToken: 0,
               debtTokenAddress: "",
               totalSupply: 0,
@@ -100,6 +101,7 @@ const L2DeploymentDetails: React.FC = () => {
               const vaultData: VaultData = await getVaultData({
                 vaultAddress: lending.address,
               });
+              returnValue.name = vaultData.name;
               returnValue.balanceOfUnderlyingToken = vaultData.balanceOfUnderlyingToken;
               returnValue.debtTokenAddress = vaultData.debtTokenAddress;
               returnValue.totalSupply = vaultData.totalSupply;

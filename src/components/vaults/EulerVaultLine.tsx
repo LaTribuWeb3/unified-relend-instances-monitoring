@@ -14,6 +14,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Chip,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AddressLink from "../AddressLink";
@@ -23,6 +24,7 @@ interface EulerVaultLineProps {
   index: number;
   vault: {
     address: string;
+    name: string;
     totalSupply: number;
     totalSupplyDebtToken: number;
     balanceOfUnderlyingToken: number;
@@ -69,22 +71,22 @@ const MetricRow: React.FC<MetricRowProps> = ({
 
   return (
     <TableRow>
-      <TableCell 
-        sx={{ 
-          fontWeight: 600, 
+      <TableCell
+        sx={{
+          fontWeight: 600,
           color: "text.secondary",
           padding: { xs: 1, md: 2 },
-          width: '40%'
+          width: "40%",
         }}
       >
         {label}
       </TableCell>
       <TableCell sx={{ padding: { xs: 1, md: 2 } }}>
-        {loading || !tooltipValue || typeof value === 'object' ? (
+        {loading || !tooltipValue || typeof value === "object" ? (
           <Typography
             variant="body2"
             sx={{
-              fontFamily: typeof value === 'object' ? 'inherit' : "monospace",
+              fontFamily: typeof value === "object" ? "inherit" : "monospace",
               fontWeight: 600,
               fontSize: "0.875rem",
             }}
@@ -92,7 +94,10 @@ const MetricRow: React.FC<MetricRowProps> = ({
             {displayValue}
           </Typography>
         ) : (
-          <Tooltip title={`${tooltip}${tokenSymbol ? ` ${tokenSymbol}` : ""}`} arrow>
+          <Tooltip
+            title={`${tooltip}${tokenSymbol ? ` ${tokenSymbol}` : ""}`}
+            arrow
+          >
             <Typography
               variant="body2"
               sx={{
@@ -125,30 +130,13 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
     return apy ? `${parseFloat(apy).toFixed(2)}%` : "N/A";
   };
 
-  const actionLink = (
-    <Link
-      href={`https://app.euler.finance/vault/${vault.address}?network=swellchain`}
-      target="_blank"
-      rel="noopener noreferrer"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        color: "primary.main",
-        textDecoration: "none",
-      }}
-    >
-      <ArrowForwardIcon sx={{ fontSize: isMobile ? 18 : 20, mr: 1 }} />
-      Open in Euler
-    </Link>
-  );
-
   return (
     <Card
       sx={{
         width: "100%",
         borderRadius: 2,
         boxShadow: 2,
-        overflow: 'hidden',
+        overflow: "hidden",
         transition: "transform 0.2s, box-shadow 0.2s",
         "&:hover": {
           transform: "translateY(-2px)",
@@ -156,28 +144,98 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
         },
       }}
     >
-      <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', bgcolor: 'grey.50' }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
-          Vault #{index + 1}
-        </Typography>
-      </Box>
-      
-      <TableContainer component={Paper} elevation={0}>
-        <Table size={isMobile ? "small" : "medium"}>
-          <TableBody>
-            <MetricRow
-              label="Address"
-              value={
+      <Box
+        sx={{
+          p: 2,
+          borderBottom: 1,
+          borderColor: "divider",
+          bgcolor: "grey.50",
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: { xs: "flex-start", md: "space-between" },
+          alignItems: { xs: "flex-start", md: "center" },
+          gap: { xs: 1.5, md: 0 },
+        }}
+      >
+        {/* Desktop: Vault name and address inline */}
+        {!isMobile && (
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              color: "text.primary",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            {vaultsLoading ? (
+              "Loading..."
+            ) : (
+              <>
+                {vault.name || `Vault #${index + 1}`} (
                 <AddressLink
                   address={vault.address}
                   chainId={vault.chainId}
-                  truncate={isMobile}
-                  fontSize={isMobile ? 12 : 14}
+                  truncate={true}
+                  fontSize={16}
                 />
-              }
-              loading={false}
-            />
+                )
+              </>
+            )}
+          </Typography>
+        )}
 
+        {/* Mobile: Vault name on separate line */}
+        {isMobile && (
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: 600, color: "text.primary" }}
+          >
+            {vaultsLoading ? "Loading..." : vault.name || `Vault #${index + 1}`}
+          </Typography>
+        )}
+
+        {/* Mobile: Address on separate line */}
+        {isMobile && !vaultsLoading && (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <AddressLink
+              address={vault.address}
+              chainId={vault.chainId}
+              truncate={true}
+              fontSize={14}
+            />
+          </Box>
+        )}
+
+        {/* Open in Euler Chip */}
+        {!vaultsLoading && (
+          <Chip
+            label="Open in Euler"
+            icon={<ArrowForwardIcon sx={{ fontSize: 16 }} />}
+            onClick={() =>
+              window.open(
+                `https://app.euler.finance/vault/${vault.address}?network=swellchain`,
+                "_blank"
+              )
+            }
+            size="small"
+            sx={{
+              bgcolor: "primary.main",
+              color: "white",
+              alignSelf: { xs: "flex-start", md: "center" },
+              "&:hover": {
+                bgcolor: "primary.dark",
+              },
+              cursor: "pointer",
+            }}
+          />
+        )}
+      </Box>
+
+      <TableContainer component={Paper} elevation={0}>
+        <Table size={isMobile ? "small" : "medium"}>
+          <TableBody>
             <MetricRow
               label="Total Supply"
               value={vault.totalSupply}
@@ -233,12 +291,6 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               label="Borrow APY"
               value={formatAPY(apys?.total?.borrowAPY)}
               loading={vaultsLoading}
-            />
-
-            <MetricRow
-              label="Action"
-              value={actionLink}
-              loading={false}
             />
           </TableBody>
         </Table>
