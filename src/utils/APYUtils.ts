@@ -41,6 +41,30 @@ interface APYResult {
   borrowAPY: number;
   supplyAPY: number;
   source: string;
+  aprRecord?: {
+    lend?: {
+      breakdowns: Array<{
+        distributionType: string;
+        identifier: string;
+        type: string;
+        value: number;
+        timestamp: string;
+      }>;
+      cumulated: number;
+      timestamp: string;
+    };
+    borrow?: {
+      breakdowns: Array<{
+        distributionType: string;
+        identifier: string;
+        type: string;
+        value: number;
+        timestamp: string;
+      }>;
+      cumulated: number;
+      timestamp: string;
+    };
+  };
 }
 
 /**
@@ -101,24 +125,37 @@ async function getMerklRewardsAPY(): Promise<APYResult> {
     (opp: any) => opp.status.toLowerCase() === "live"
   );
 
-  const borrowAPY = liveVaultOpportunities
-    .filter((opp: any) => opp.action.toLowerCase() === "borrow")
-    .map((opp: any) => opp.apr);
-  const lendAPY = liveVaultOpportunities
-    .filter((opp: any) => opp.action.toLowerCase() === "lend")
-    .map((opp: any) => opp.apr);
+  const borrowOpportunities = liveVaultOpportunities
+    .filter((opp: any) => opp.action.toLowerCase() === "borrow");
+  const lendOpportunities = liveVaultOpportunities
+    .filter((opp: any) => opp.action.toLowerCase() === "lend");
 
-  if (borrowAPY.length > 1) {
+  if (borrowOpportunities.length > 1) {
     throw new Error("Multiple borrow opportunities found");
   }
-  if (lendAPY.length > 1) {
+  if (lendOpportunities.length > 1) {
     throw new Error("Multiple lend opportunities found");
   }
 
+  const borrowOpp = borrowOpportunities[0];
+  const lendOpp = lendOpportunities[0];
+
   return {
-    borrowAPY: parseFloat(borrowAPY[0]) || 0,
-    supplyAPY: parseFloat(lendAPY[0]) || 0,
+    borrowAPY: parseFloat(borrowOpp?.apr) || 0,
+    supplyAPY: parseFloat(lendOpp?.apr) || 0,
     source: "Merkl API",
+    aprRecord: {
+      lend: lendOpp?.aprRecord ? {
+        breakdowns: lendOpp.aprRecord.breakdowns || [],
+        cumulated: lendOpp.aprRecord.cumulated || 0,
+        timestamp: lendOpp.aprRecord.timestamp || "",
+      } : undefined,
+      borrow: borrowOpp?.aprRecord ? {
+        breakdowns: borrowOpp.aprRecord.breakdowns || [],
+        cumulated: borrowOpp.aprRecord.cumulated || 0,
+        timestamp: borrowOpp.aprRecord.timestamp || "",
+      } : undefined,
+    },
   };
 }
 
