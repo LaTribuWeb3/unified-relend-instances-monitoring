@@ -1,24 +1,22 @@
-import React from "react";
+import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import {
-  Card,
   Box,
-  Typography,
-  Link,
-  useTheme,
-  useMediaQuery,
-  Tooltip,
+  Card,
+  Chip,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
-  Paper,
-  Chip,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import React from "react";
 import AddressLink from "../AddressLink";
-import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
 
 interface EulerVaultLineProps {
   index: number;
