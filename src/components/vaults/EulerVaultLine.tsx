@@ -8,6 +8,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Tooltip,
   Typography,
@@ -149,6 +150,56 @@ const MetricRow: React.FC<MetricRowProps> = ({
   );
 };
 
+// Simplified APY breakdown table (without interactive elements for now)
+const APYBreakdownTable: React.FC<{
+  type: "supply" | "borrow";
+  apys: any;
+}> = ({ type, apys }) => {
+  const eulerRate = type === "supply" ? apys?.euler?.supplyAPY : apys?.euler?.borrowAPY;
+  const merklRate = type === "supply" ? apys?.merkl?.supplyAPY : apys?.merkl?.borrowAPY;
+  const totalRate = type === "supply" ? apys?.total?.supplyAPY : apys?.total?.borrowAPY;
+
+  return (
+    <Box>
+      <Table size="small" sx={{ minWidth: 200, maxWidth: 350 }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ fontWeight: 600, py: 0.3, px: 0.5, fontSize: "0.75rem" }}>Source</TableCell>
+            <TableCell align="right" sx={{ fontWeight: 600, py: 0.3, px: 0.5, fontSize: "0.75rem" }}>Rate</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell sx={{ py: 0.25, px: 0.5, border: 0, fontSize: "0.75rem" }}>Euler</TableCell>
+            <TableCell align="right" sx={{ py: 0.25, px: 0.5, border: 0, fontFamily: "monospace", fontSize: "0.75rem" }}>
+              {eulerRate?.toFixed(2)}%
+            </TableCell>
+          </TableRow>
+          
+          <TableRow>
+            <TableCell sx={{ py: 0.25, px: 0.5, border: 0, fontSize: "0.75rem" }}>Merkl</TableCell>
+            <TableCell align="right" sx={{ py: 0.25, px: 0.5, border: 0, fontFamily: "monospace", fontSize: "0.75rem" }}>
+              {type === "borrow" ? "-" : ""}{merklRate?.toFixed(2)}%
+            </TableCell>
+          </TableRow>
+
+          {/* Total Row */}
+          <TableRow sx={{ borderTop: 1, borderColor: "divider" }}>
+            <TableCell sx={{ fontWeight: 600, py: 0.25, px: 0.5, fontSize: "0.75rem" }}>Total</TableCell>
+            <TableCell align="right" sx={{ fontWeight: 600, py: 0.25, px: 0.5, fontFamily: "monospace", fontSize: "0.75rem" }}>
+              {totalRate?.toFixed(2)}%
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+      
+      <Typography variant="caption" sx={{ mt: 0.5, display: "block", opacity: 0.7, fontSize: "0.65rem" }}>
+        Sources: {apys?.euler?.source} + {apys?.merkl?.source}
+      </Typography>
+    </Box>
+  );
+};
+
 const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
   index,
   vault,
@@ -159,66 +210,9 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const formatAPYWithBreakdown = (
-    totalAPY: number,
-    eulerAPY: number,
-    merklAPY: number,
-    type: "supply" | "borrow"
-  ) => {
-    if (!totalAPY && totalAPY !== 0) return "N/A";
 
-    const total = totalAPY.toFixed(2);
-    const euler = eulerAPY.toFixed(2);
-    const merkl = merklAPY.toFixed(2);
 
-    return `${total}% (Euler: ${euler}% ${
-      type === "supply" ? "+" : "-"
-    } Merkl: ${merkl}%)`;
-  };
 
-  // Component for APR record details (for tooltips)
-  const APRRecordDetails: React.FC<{
-    aprRecord: any;
-    type: "supply" | "borrow";
-  }> = ({ aprRecord, type }) => {
-    const recordData = type === "supply" ? aprRecord?.lend : aprRecord?.borrow;
-    
-    if (!recordData) return null;
-
-    return (
-      <Box sx={{ mt: 1, pl: 2, borderLeft: 1, borderColor: "divider" }}>
-        <Typography
-          variant="caption"
-          sx={{ fontWeight: 600, display: "block" }}
-        >
-          Merkl Campaign Details:
-        </Typography>
-        {recordData.breakdowns.map((breakdown: any, index: number) => (
-          <Box key={index} sx={{ mt: 0.5 }}>
-            <Typography variant="caption" sx={{ display: "block" }}>
-              • Type: {breakdown.type} ({breakdown.distributionType})
-            </Typography>
-            <Typography variant="caption" sx={{ display: "block" }}>
-              • Value: {breakdown.value.toFixed(4)}%
-            </Typography>
-            <Typography
-              variant="caption"
-              sx={{ display: "block", opacity: 0.8 }}
-            >
-              • Campaign ID: {breakdown.identifier.slice(0, 10)}...
-            </Typography>
-          </Box>
-        ))}
-        <Typography
-          variant="caption"
-          sx={{ mt: 0.5, display: "block", opacity: 0.8 }}
-        >
-          Last updated:{" "}
-          {new Date(parseInt(recordData.timestamp) * 1000).toLocaleString()}
-        </Typography>
-      </Box>
-    );
-  };
 
   return (
     <Card
@@ -371,7 +365,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               tooltipValue={vault.borrowCap}
             />
 
-            {/* Supply APY with tooltip */}
+            {/* Supply APY Breakdown Table */}
             <TableRow>
               <TableCell
                 sx={{
@@ -379,6 +373,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                   color: "text.secondary",
                   padding: { xs: 1, md: 2 },
                   width: "40%",
+                  verticalAlign: "top",
                 }}
               >
                 Supply APY
@@ -396,65 +391,12 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                     ...
                   </Typography>
                 ) : (
-                  <Tooltip
-                    title={
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, mb: 1 }}
-                        >
-                          Supply APY Breakdown:
-                        </Typography>
-                        <Typography variant="body2">
-                          • Euler Lens: {apys?.euler?.supplyAPY?.toFixed(4)}%
-                          (Base lending rate)
-                        </Typography>
-                        <Typography variant="body2">
-                          • Merkl Rewards: {apys?.merkl?.supplyAPY?.toFixed(4)}%
-                          (Token incentives)
-                        </Typography>
-                        <APRRecordDetails
-                          aprRecord={apys?.merkl?.aprRecord}
-                          type="supply"
-                        />
-                        <Typography
-                          variant="body2"
-                          sx={{ mt: 1, fontWeight: 600 }}
-                        >
-                          Total: {apys?.total?.supplyAPY?.toFixed(4)}%
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          sx={{ mt: 1, display: "block", opacity: 0.8 }}
-                        >
-                          Sources: {apys?.euler?.source} + {apys?.merkl?.source}
-                        </Typography>
-                      </Box>
-                    }
-                    arrow
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontFamily: "monospace",
-                        fontWeight: 600,
-                        fontSize: "0.875rem",
-                        cursor: "help",
-                      }}
-                    >
-                      {formatAPYWithBreakdown(
-                        apys?.total?.supplyAPY,
-                        apys?.euler?.supplyAPY,
-                        apys?.merkl?.supplyAPY,
-                        "supply"
-                      )}
-                    </Typography>
-                  </Tooltip>
+                  <APYBreakdownTable type="supply" apys={apys} />
                 )}
               </TableCell>
             </TableRow>
 
-            {/* Borrow APY with tooltip */}
+            {/* Borrow APY Breakdown Table */}
             <TableRow>
               <TableCell
                 sx={{
@@ -462,6 +404,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                   color: "text.secondary",
                   padding: { xs: 1, md: 2 },
                   width: "40%",
+                  verticalAlign: "top",
                 }}
               >
                 Borrow APY
@@ -479,60 +422,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                     ...
                   </Typography>
                 ) : (
-                  <Tooltip
-                    title={
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, mb: 1 }}
-                        >
-                          Borrow APY Breakdown:
-                        </Typography>
-                        <Typography variant="body2">
-                          • Euler Lens: {apys?.euler?.borrowAPY?.toFixed(4)}%
-                          (Base borrowing rate)
-                        </Typography>
-                        <Typography variant="body2">
-                          • Merkl Rewards: -{apys?.merkl?.borrowAPY?.toFixed(4)}%
-                          (Borrow incentives)
-                        </Typography>
-                        <APRRecordDetails
-                          aprRecord={apys?.merkl?.aprRecord}
-                          type="borrow"
-                        />
-                        <Typography
-                          variant="body2"
-                          sx={{ mt: 1, fontWeight: 600 }}
-                        >
-                          Net Cost: {apys?.total?.borrowAPY?.toFixed(4)}%
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          sx={{ mt: 1, display: "block", opacity: 0.8 }}
-                        >
-                          Sources: {apys?.euler?.source} + {apys?.merkl?.source}
-                        </Typography>
-                      </Box>
-                    }
-                    arrow
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontFamily: "monospace",
-                        fontWeight: 600,
-                        fontSize: "0.875rem",
-                        cursor: "help",
-                      }}
-                    >
-                      {formatAPYWithBreakdown(
-                        apys?.total?.borrowAPY,
-                        apys?.euler?.borrowAPY,
-                        apys?.merkl?.borrowAPY,
-                        "borrow"
-                      )}
-                    </Typography>
-                  </Tooltip>
+                  <APYBreakdownTable type="borrow" apys={apys} />
                 )}
               </TableCell>
             </TableRow>
