@@ -7,6 +7,13 @@ import {
   useTheme,
   useMediaQuery,
   Tooltip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AddressLink from "../AddressLink";
@@ -34,6 +41,76 @@ interface EulerVaultLineProps {
   tokenSymbol: string;
 }
 
+// Reusable metric row component
+interface MetricRowProps {
+  label: string;
+  value: string | number | React.ReactNode;
+  loading: boolean;
+  formatAsNumber?: boolean;
+  tokenSymbol?: string;
+  tooltipValue?: string | number;
+}
+
+const MetricRow: React.FC<MetricRowProps> = ({
+  label,
+  value,
+  loading,
+  formatAsNumber = false,
+  tokenSymbol = "",
+  tooltipValue,
+}) => {
+  const displayValue = loading
+    ? "..."
+    : formatAsNumber
+    ? `${FriendlyFormatNumber(value as number)} ${tokenSymbol}`
+    : value;
+
+  const tooltip = tooltipValue || value;
+
+  return (
+    <TableRow>
+      <TableCell 
+        sx={{ 
+          fontWeight: 600, 
+          color: "text.secondary",
+          padding: { xs: 1, md: 2 },
+          width: '40%'
+        }}
+      >
+        {label}
+      </TableCell>
+      <TableCell sx={{ padding: { xs: 1, md: 2 } }}>
+        {loading || !tooltipValue || typeof value === 'object' ? (
+          <Typography
+            variant="body2"
+            sx={{
+              fontFamily: typeof value === 'object' ? 'inherit' : "monospace",
+              fontWeight: 600,
+              fontSize: "0.875rem",
+            }}
+          >
+            {displayValue}
+          </Typography>
+        ) : (
+          <Tooltip title={`${tooltip}${tokenSymbol ? ` ${tokenSymbol}` : ""}`} arrow>
+            <Typography
+              variant="body2"
+              sx={{
+                fontFamily: "monospace",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                cursor: "help",
+              }}
+            >
+              {displayValue}
+            </Typography>
+          </Tooltip>
+        )}
+      </TableCell>
+    </TableRow>
+  );
+};
+
 const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
   index,
   vault,
@@ -44,17 +121,34 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  const formatAPY = (apy: string) => {
+    return apy ? `${parseFloat(apy).toFixed(2)}%` : "N/A";
+  };
+
+  const actionLink = (
+    <Link
+      href={`https://app.euler.finance/vault/${vault.address}?network=swellchain`}
+      target="_blank"
+      rel="noopener noreferrer"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        color: "primary.main",
+        textDecoration: "none",
+      }}
+    >
+      <ArrowForwardIcon sx={{ fontSize: isMobile ? 18 : 20, mr: 1 }} />
+      Open in Euler
+    </Link>
+  );
+
   return (
     <Card
       sx={{
         width: "100%",
         borderRadius: 2,
         boxShadow: 2,
-        p: { xs: 2, md: 2 },
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        alignItems: { xs: "stretch", md: "center" },
-        justifyContent: "space-between",
+        overflow: 'hidden',
         transition: "transform 0.2s, box-shadow 0.2s",
         "&:hover": {
           transform: "translateY(-2px)",
@@ -62,495 +156,93 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
         },
       }}
     >
-      {/* Mobile Layout */}
-      {isMobile ? (
-        <>
-          {/* Header Row */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 2,
-            }}
-          >
-            <Typography
-              variant="subtitle1"
-              sx={{ fontWeight: 600, color: "text.primary" }}
-            >
-              Vault #{index + 1}
-            </Typography>
-            <Link
-              href={`https://app.euler.finance/vault/${vault.address}?network=swellchain`}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                color: "primary.main",
-                textDecoration: "none",
-              }}
-            >
-              <ArrowForwardIcon sx={{ fontSize: 20 }} />
-            </Link>
-          </Box>
-
-          {/* Address Row */}
-          <Box sx={{ mb: 2 }}>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mb: 0.5, display: "block" }}
-            >
-              Address
-            </Typography>
-            <AddressLink
-              address={vault.address}
-              chainId={vault.chainId}
-              fontSize={14}
+      <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider', bgcolor: 'grey.50' }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
+          Vault #{index + 1}
+        </Typography>
+      </Box>
+      
+      <TableContainer component={Paper} elevation={0}>
+        <Table size={isMobile ? "small" : "medium"}>
+          <TableBody>
+            <MetricRow
+              label="Address"
+              value={
+                <AddressLink
+                  address={vault.address}
+                  chainId={vault.chainId}
+                  truncate={isMobile}
+                  fontSize={isMobile ? 12 : 14}
+                />
+              }
+              loading={false}
             />
-          </Box>
 
-          {/* Metrics Grid */}
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 2,
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <Box>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ display: "block" }}
-                >
-                  Total Supply
-                </Typography>
-                <Tooltip
-                  title={vaultsLoading ? "" : `${vault.totalSupply}`}
-                  arrow
-                >
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontFamily: "monospace",
-                      fontWeight: 600,
-                      fontSize: "0.875rem",
-                      cursor: "help",
-                    }}
-                  >
-                    {vaultsLoading
-                      ? "..."
-                      : `${FriendlyFormatNumber(
-                          vault.totalSupply
-                        )} ${tokenSymbol}`}
-                  </Typography>
-                </Tooltip>
-              </Box>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Balance of Underlying Token
-              </Typography>
-              <Tooltip
-                title={vaultsLoading ? "" : `${vault.balanceOfUnderlyingToken}`}
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.balanceOfUnderlyingToken
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Supply Debt Token
-              </Typography>
-              <Tooltip
-                title={vaultsLoading ? "" : `${vault.totalSupplyDebtToken}`}
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.totalSupplyDebtToken
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Borrows
-              </Typography>
-              <Tooltip
-                title={vaultsLoading ? "" : `${vault.totalBorrows}`}
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.totalBorrows
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Supply APY
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontFamily: "monospace",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                }}
-              >
-                {vaultsLoading
-                  ? "..."
-                  : apys?.total?.supplyAPY
-                  ? `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`
-                  : "N/A"}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Borrow APY
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontFamily: "monospace",
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                }}
-              >
-                {vaultsLoading
-                  ? "..."
-                  : apys?.total?.borrowAPY
-                  ? `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`
-                  : "N/A"}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Cap
-              </Typography>
-              <Tooltip title={vaultsLoading ? "" : `${vault.borrowCap}`} arrow>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(vault.borrowCap)} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-          </Box>
-        </>
-      ) : (
-        <>
-          {/* Desktop Layout - Original horizontal layout */}
-          {/* Vault Number */}
-          <Box sx={{ display: "flex", alignItems: "center", minWidth: 120 }}>
-            <Typography
-              variant="subtitle2"
-              sx={{ fontWeight: 600, color: "text.secondary" }}
-            >
-              Vault #{index + 1}
-            </Typography>
-          </Box>
-          {/* Address */}
-          <Box
-            sx={{
-              minWidth: 180,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mb: 0.5 }}
-            >
-              Address
-            </Typography>
-            <AddressLink
-              address={vault.address}
-              chainId={vault.chainId}
-              truncate={true}
-              fontSize={15}
+            <MetricRow
+              label="Total Supply"
+              value={vault.totalSupply}
+              loading={vaultsLoading}
+              formatAsNumber={true}
+              tokenSymbol={tokenSymbol}
+              tooltipValue={vault.totalSupply}
             />
-          </Box>
-          {/* Metrics */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Total Supply
-              </Typography>
-              <Tooltip
-                title={vaultsLoading ? "" : `${vault.totalSupply}`}
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.totalSupply
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Balance of Underlying Token
-              </Typography>
-              <Tooltip
-                title={vaultsLoading ? "" : `${vault.balanceOfUnderlyingToken}`}
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    fontSize: "0.875rem",
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.balanceOfUnderlyingToken
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Supply Debt Token
-              </Typography>
-              <Tooltip
-                title={
-                  vaultsLoading
-                    ? ""
-                    : `${vault.totalSupplyDebtToken} ${tokenSymbol}`
-                }
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.totalSupplyDebtToken
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Borrows
-              </Typography>
-              <Tooltip
-                title={
-                  vaultsLoading ? "" : `${vault.totalBorrows} ${tokenSymbol}`
-                }
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(
-                        vault.totalBorrows
-                      )} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Cap
-              </Typography>
-              <Tooltip
-                title={vaultsLoading ? "" : `${vault.borrowCap} ${tokenSymbol}`}
-                arrow
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontFamily: "monospace",
-                    fontWeight: 600,
-                    cursor: "help",
-                  }}
-                >
-                  {vaultsLoading
-                    ? "..."
-                    : `${FriendlyFormatNumber(vault.borrowCap)} ${tokenSymbol}`}
-                </Typography>
-              </Tooltip>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Supply APY
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ fontFamily: "monospace", fontWeight: 600 }}
-              >
-                {vaultsLoading
-                  ? "..."
-                  : apys?.total?.supplyAPY
-                  ? `${parseFloat(apys.total.supplyAPY).toFixed(2)}%`
-                  : "N/A"}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ display: "block" }}
-              >
-                Borrow APY
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ fontFamily: "monospace", fontWeight: 600 }}
-              >
-                {vaultsLoading
-                  ? "..."
-                  : apys?.total?.borrowAPY
-                  ? `${parseFloat(apys.total.borrowAPY).toFixed(2)}%`
-                  : "N/A"}
-              </Typography>
-            </Box>
-          </Box>
-          {/* Arrow Link */}
-          <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
-            <Link
-              href={`https://app.euler.finance/vault/${vault.address}?network=swellchain`}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                color: "primary.main",
-                textDecoration: "none",
-              }}
-            >
-              <ArrowForwardIcon />
-            </Link>
-          </Box>
-        </>
-      )}
+
+            <MetricRow
+              label="Balance of Underlying Token"
+              value={vault.balanceOfUnderlyingToken}
+              loading={vaultsLoading}
+              formatAsNumber={true}
+              tokenSymbol={tokenSymbol}
+              tooltipValue={vault.balanceOfUnderlyingToken}
+            />
+
+            <MetricRow
+              label="Supply Debt Token"
+              value={vault.totalSupplyDebtToken}
+              loading={vaultsLoading}
+              formatAsNumber={true}
+              tokenSymbol={tokenSymbol}
+              tooltipValue={vault.totalSupplyDebtToken}
+            />
+
+            <MetricRow
+              label="Borrows"
+              value={vault.totalBorrows}
+              loading={vaultsLoading}
+              formatAsNumber={true}
+              tokenSymbol={tokenSymbol}
+              tooltipValue={vault.totalBorrows}
+            />
+
+            <MetricRow
+              label="Cap"
+              value={vault.borrowCap}
+              loading={vaultsLoading}
+              formatAsNumber={true}
+              tokenSymbol={tokenSymbol}
+              tooltipValue={vault.borrowCap}
+            />
+
+            <MetricRow
+              label="Supply APY"
+              value={formatAPY(apys?.total?.supplyAPY)}
+              loading={vaultsLoading}
+            />
+
+            <MetricRow
+              label="Borrow APY"
+              value={formatAPY(apys?.total?.borrowAPY)}
+              loading={vaultsLoading}
+            />
+
+            <MetricRow
+              label="Action"
+              value={actionLink}
+              loading={false}
+            />
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Card>
   );
 };
