@@ -1,5 +1,4 @@
-import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import React from "react";
 import {
   Box,
   Card,
@@ -15,7 +14,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { FriendlyFormatNumber } from "@/utils/DisplayUtils";
 import AddressLink from "../AddressLink";
 
 interface EulerVaultLineProps {
@@ -176,6 +176,50 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
     } Merkl: ${merkl}%)`;
   };
 
+  // Component for APR record details (for tooltips)
+  const APRRecordDetails: React.FC<{
+    aprRecord: any;
+    type: "supply" | "borrow";
+  }> = ({ aprRecord, type }) => {
+    const recordData = type === "supply" ? aprRecord?.lend : aprRecord?.borrow;
+    
+    if (!recordData) return null;
+
+    return (
+      <Box sx={{ mt: 1, pl: 2, borderLeft: 1, borderColor: "divider" }}>
+        <Typography
+          variant="caption"
+          sx={{ fontWeight: 600, display: "block" }}
+        >
+          Merkl Campaign Details:
+        </Typography>
+        {recordData.breakdowns.map((breakdown: any, index: number) => (
+          <Box key={index} sx={{ mt: 0.5 }}>
+            <Typography variant="caption" sx={{ display: "block" }}>
+              • Type: {breakdown.type} ({breakdown.distributionType})
+            </Typography>
+            <Typography variant="caption" sx={{ display: "block" }}>
+              • Value: {breakdown.value.toFixed(4)}%
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{ display: "block", opacity: 0.8 }}
+            >
+              • Campaign ID: {breakdown.identifier.slice(0, 10)}...
+            </Typography>
+          </Box>
+        ))}
+        <Typography
+          variant="caption"
+          sx={{ mt: 0.5, display: "block", opacity: 0.8 }}
+        >
+          Last updated:{" "}
+          {new Date(parseInt(recordData.timestamp) * 1000).toLocaleString()}
+        </Typography>
+      </Box>
+    );
+  };
+
   return (
     <Card
       sx={{
@@ -327,7 +371,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               tooltipValue={vault.borrowCap}
             />
 
-            {/* Supply APY with enhanced tooltip */}
+            {/* Supply APY with tooltip */}
             <TableRow>
               <TableCell
                 sx={{
@@ -369,62 +413,10 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                           • Merkl Rewards: {apys?.merkl?.supplyAPY?.toFixed(4)}%
                           (Token incentives)
                         </Typography>
-
-                        {/* Merkl APR Record Details */}
-                        {apys?.merkl?.aprRecord?.lend && (
-                          <Box
-                            sx={{
-                              mt: 1,
-                              pl: 2,
-                              borderLeft: 1,
-                              borderColor: "divider",
-                            }}
-                          >
-                            <Typography
-                              variant="caption"
-                              sx={{ fontWeight: 600, display: "block" }}
-                            >
-                              Merkl Campaign Details:
-                            </Typography>
-                            {apys.merkl.aprRecord.lend.breakdowns.map(
-                              (breakdown, index) => (
-                                <Box key={index} sx={{ mt: 0.5 }}>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ display: "block" }}
-                                  >
-                                    • Type: {breakdown.type} (
-                                    {breakdown.distributionType})
-                                  </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ display: "block" }}
-                                  >
-                                    • Value: {breakdown.value.toFixed(4)}%
-                                  </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ display: "block", opacity: 0.8 }}
-                                  >
-                                    • Campaign ID:{" "}
-                                    {breakdown.identifier.slice(0, 10)}...
-                                  </Typography>
-                                </Box>
-                              )
-                            )}
-                            <Typography
-                              variant="caption"
-                              sx={{ mt: 0.5, display: "block", opacity: 0.8 }}
-                            >
-                              Last updated:{" "}
-                              {new Date(
-                                parseInt(apys.merkl.aprRecord.lend.timestamp) *
-                                  1000
-                              ).toLocaleString()}
-                            </Typography>
-                          </Box>
-                        )}
-
+                        <APRRecordDetails
+                          aprRecord={apys?.merkl?.aprRecord}
+                          type="supply"
+                        />
                         <Typography
                           variant="body2"
                           sx={{ mt: 1, fontWeight: 600 }}
@@ -462,7 +454,7 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
               </TableCell>
             </TableRow>
 
-            {/* Borrow APY with enhanced tooltip */}
+            {/* Borrow APY with tooltip */}
             <TableRow>
               <TableCell
                 sx={{
@@ -501,66 +493,13 @@ const EulerVaultLine: React.FC<EulerVaultLineProps> = ({
                           (Base borrowing rate)
                         </Typography>
                         <Typography variant="body2">
-                          • Merkl Rewards: -{apys?.merkl?.borrowAPY?.toFixed(4)}
-                          % (Borrow incentives)
+                          • Merkl Rewards: -{apys?.merkl?.borrowAPY?.toFixed(4)}%
+                          (Borrow incentives)
                         </Typography>
-
-                        {/* Merkl APR Record Details for Borrow */}
-                        {apys?.merkl?.aprRecord?.borrow && (
-                          <Box
-                            sx={{
-                              mt: 1,
-                              pl: 2,
-                              borderLeft: 1,
-                              borderColor: "divider",
-                            }}
-                          >
-                            <Typography
-                              variant="caption"
-                              sx={{ fontWeight: 600, display: "block" }}
-                            >
-                              Merkl Campaign Details:
-                            </Typography>
-                            {apys.merkl.aprRecord.borrow.breakdowns.map(
-                              (breakdown, index) => (
-                                <Box key={index} sx={{ mt: 0.5 }}>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ display: "block" }}
-                                  >
-                                    • Type: {breakdown.type} (
-                                    {breakdown.distributionType})
-                                  </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ display: "block" }}
-                                  >
-                                    • Value: {breakdown.value.toFixed(4)}%
-                                  </Typography>
-                                  <Typography
-                                    variant="caption"
-                                    sx={{ display: "block", opacity: 0.8 }}
-                                  >
-                                    • Campaign ID:{" "}
-                                    {breakdown.identifier.slice(0, 10)}...
-                                  </Typography>
-                                </Box>
-                              )
-                            )}
-                            <Typography
-                              variant="caption"
-                              sx={{ mt: 0.5, display: "block", opacity: 0.8 }}
-                            >
-                              Last updated:{" "}
-                              {new Date(
-                                parseInt(
-                                  apys.merkl.aprRecord.borrow.timestamp
-                                ) * 1000
-                              ).toLocaleString()}
-                            </Typography>
-                          </Box>
-                        )}
-
+                        <APRRecordDetails
+                          aprRecord={apys?.merkl?.aprRecord}
+                          type="borrow"
+                        />
                         <Typography
                           variant="body2"
                           sx={{ mt: 1, fontWeight: 600 }}
